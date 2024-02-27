@@ -1,23 +1,21 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import './App.css'; // Your main application styles
+import sky from './assets/img/sky.jpg';
+
+
+// Import components
+//import Header from './components/common/Header';
+//import Footer from './components/common/Footer';
+// Example of importing a 3D scene component
+import MainScene from './components/scenes/MainScene';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="App" style={{ backgroundImage: `url(${sky})` }} >
+      {/* Your routing and main content would typically go here. For simplicity, we're just rendering the HomeScene */}
+      <main>
+        <MainScene />
+      </main>
     </div>
   );
 }
