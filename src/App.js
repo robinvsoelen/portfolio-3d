@@ -1,6 +1,5 @@
 import React from 'react';
 import './App.css'; // Your main application styles
-import sky from './assets/img/sky.jpg';
 
 
 // Import components
@@ -11,7 +10,7 @@ import MainScene from './components/scenes/MainScene';
 
 function App() {
   return (
-    <div className="App" style={{ backgroundImage: `url(${sky})` }} >
+    <div className="App" >
       {/* Your routing and main content would typically go here. For simplicity, we're just rendering the HomeScene */}
       <main>
         <MainScene />
