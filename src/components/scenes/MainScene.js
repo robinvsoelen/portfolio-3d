@@ -1,29 +1,13 @@
 // src/components/scenes/MainScene.js
-import React, { useRef, useEffect, useMemo } from 'react';
+import React, { useRef, useEffect, useMemo, useState } from 'react';
 import { Canvas, useThree, useFrame  } from '@react-three/fiber';
-import { OrbitControls, Stars } from '@react-three/drei';
+import { Stars, Sky } from '@react-three/drei';
 import { Car } from '../3D/car'; // Adjust the import path according to your project structure
+import { Scene } from '../3D/scene'; // Adjust the import path according to your project structure
 
-function Landscape() {
-    return (
-      <mesh receiveShadow position={[0, -0.5, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        {/* Corrected from planeBufferGeometry to planeGeometry */}
-        <planeGeometry args={[1000, 1000]} />
-        <meshStandardMaterial color="green" />
-      </mesh>
-    );
-  }
-  
-  function Road() {
-    return (
-      <mesh receiveShadow position={[0, -0.49, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        {/* Corrected from planeBufferGeometry to planeGeometry */}
-        <planeGeometry args={[3, 1000]} />
-        <meshStandardMaterial color="gray" />
-      </mesh>
-    );
-  }
-  function CameraController() {
+import * as THREE from 'three';
+
+  function CameraController({ spotlightRef }) {
     const { camera, gl } = useThree();
     const mouse = useRef({ x: 0, y: 0 });
     const positionZ = useRef(0); // Use this ref to track the simulated scroll position
@@ -56,9 +40,15 @@ function Landscape() {
     }, [gl.domElement]);
   
     useFrame(() => {
+
+      if (spotlightRef.current) {
+        spotlightRef.current.position.copy(camera.position); // Spotlight follows the camera position
+        spotlightRef.current.target.position.set(0,0, positionZ.current -10); // Adjust target position if needed
+        spotlightRef.current.target.updateMatrixWorld();
+      }
       // Adjust camera rotation based on mouse movement
-      const maxRotation = Math.PI / 20; // Max rotation angle
-      camera.rotation.x = -mouse.current.y * maxRotation;
+      const maxRotation = Math.PI / 10; // Max rotation angle
+      camera.rotation.x = -mouse.current.y * maxRotation - Math.PI / 20;
       camera.rotation.y = -mouse.current.x * maxRotation;
   
       // Adjust camera position based on the simulated "scroll" position
@@ -66,7 +56,11 @@ function Landscape() {
       camera.position.y = 3;
 
     });
-  
+
+    camera.near = 1;
+    camera.far = 100000;  
+    camera.updateProjectionMatrix(); // Call this to update the camera after changing its properties
+
     return null;
   }
 
@@ -112,21 +106,39 @@ function Landscape() {
     });
   }
 
+
 function MainScene() {
     const carRef = useRef();
-
+    const spotlightRef = useRef();
   return (
     <div style={{ height: "100vh" }}>
-      <Canvas shadows>
-        <ambientLight intensity={5} />
-        <spotLight position={[10, 15, 10]} angle={0.3} />
-        <Stars />
-        <Landscape />
-        <Road />
-        <Car ref={carRef}  /> {/* Include the Car component in your scene */}
-        <CameraController /> {/* Include the camera controller in your scene */}
-        <CarPositionUpdater carRef={carRef} />
+      <Canvas shadows gammafactor={2.2}>
+      <ambientLight intensity={0.3} />
 
+        <Sky
+          distance={450000}
+          exposure={0}
+          elevation={90}
+        />
+        <Scene />
+        <Car ref={carRef} lightsOn={true} /> {/*          <Stars /> Include the Car component in your scene */}
+        <CameraController spotlightRef={spotlightRef} /> {/* Include the camera controller in your scene */}
+        <CarPositionUpdater carRef={carRef} />
+        <directionalLight
+          castShadow // Enables shadow casting
+          position={[0, 100, 0]} // Position of the sun at midday
+          intensity={0} // Brightness of the sun
+          color={0xffffff} // Color of sunlight at noon
+          shadow-mapSize-width={2048} // Width of the shadow map
+          shadow-mapSize-height={2048} // Height of the shadow map
+          shadow-camera-near={0.5} // Near plane of the shadow camera
+          shadow-camera-far={500} // Far plane of the shadow camera
+          shadow-camera-left={-100} // Left plane of the shadow camera
+          shadow-camera-right={100} // Right plane of the shadow camera
+          shadow-camera-top={100} // Top plane of the shadow camera
+          shadow-camera-bottom={-100} // Bottom plane of the shadow camera
+          shadow-bias={-0.0001} // Reduces shadow acne
+      />
       </Canvas>
     </div>
   );
