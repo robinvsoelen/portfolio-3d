@@ -10,15 +10,15 @@ import * as THREE from 'three';
 const tracks = [
   {
     name: "main",
-    cameraMin: -300,
+    cameraMin: -500,
     cameraMax: 10,
     direction: new THREE.Vector3(0, 0, -1),
     rotation: 0 // Moving directly along the Z-axis
   },
   {
     name: "work",
-    cameraMin: -100,
-    cameraMax: -60,
+    cameraMin: -160,
+    cameraMax: -65,
     direction: new THREE.Vector3(-1, 0, -1).normalize(), // Moving at a 45-degree angle
     rotation: Math.PI / 4 // Moving at a 45-degree angle
   },
@@ -26,17 +26,45 @@ const tracks = [
 
   let rotationYoffset = 0;
 
-  function CameraController({ currentTrack }) {
+  function CameraController({ currentTrack, setCurrentTrack, directionalLightRef }) {
     const { camera, gl } = useThree();
     const mouse = useRef({ x: 0, y: 0 });
     const positionZ = useRef(0); // Use this ref to track the simulated scroll position
+    const currentTrackRef = useRef(currentTrack);
+
 
     useEffect(() => {
-      camera.position.z = currentTrack.cameraMax
-      positionZ.current = currentTrack.cameraMax
-      rotationYoffset =  currentTrack.rotation
+      if (currentTrack.name !== "main") {
+        let offsetZ = 6 * Math.cos(currentTrack.rotation);
+        let offsetX = 6 * Math.sin(currentTrack.rotation);
+        camera.position.z = currentTrack.cameraMax - offsetZ
+        camera.position.x = -offsetX
+        positionZ.current = currentTrack.cameraMax - offsetZ
+        rotationYoffset =  currentTrack.rotation
+        console.log(offsetZ)
+      }
+      else {
+        camera.position.x = 0
+        positionZ.current = camera.position.z + 10
+        rotationYoffset =  currentTrack.rotation
+      }
+      currentTrackRef.current = currentTrack;
+
+      console.log(currentTrack.cameraMax)
+
     }, [currentTrack]); 
 
+    useFrame(({ camera }) => {
+      // Example logic to adjust light intensity based on camera's Z position
+      if (directionalLightRef.current) {
+        const zPosition = camera.position.z*-1 + 10;
+        const baseIntensity = 1; // Base intensity of the light
+        const intensityFactor = -0.001; // Factor to scale intensity adjustment
+        const maxIntensity = 5; // Maximum intensity to clamp to
+        // Adjust the intensity. This example decreases intensity as the camera moves further along the Z-axis.
+        directionalLightRef.current.intensity = Math.max(Math.min(baseIntensity + (zPosition * intensityFactor  * -1), maxIntensity), 0);
+      }
+    });
   
     useEffect(() => {
       let frameId = null;
@@ -66,12 +94,17 @@ const tracks = [
       const updatePosition = () => {
         speed *= friction; // Apply friction to speed to simulate deceleration
         positionZ.current -= speed; // Update the camera's position based on the current speed
-        positionZ.current = Math.min(Math.max(positionZ.current, currentTrack.cameraMin), currentTrack.cameraMax);
-    
+        positionZ.current = Math.min(Math.max(positionZ.current, currentTrackRef.current.cameraMin), currentTrackRef.current.cameraMax);
+        
         if (Math.abs(speed) > 0.001) {
           frameId = requestAnimationFrame(updatePosition);
         } else {
           frameId = null;
+        }
+
+        if (positionZ.current  >= currentTrackRef.current.cameraMax && currentTrackRef.current.name != "main")
+        {
+          setCurrentTrack(tracks[0])
         }
       };
       
@@ -88,21 +121,33 @@ const tracks = [
     }, [gl.domElement]);
   
     useFrame(() => {
+  // Variables for maximum rotation
+  const maxRotationX = Math.PI / 10;
+  const maxRotationY = Math.PI / 10;
 
-      // Adjust camera rotation based on mouse movement
-      const maxRotation = Math.PI / 10; // Max rotation angle
-      camera.rotation.x = -mouse.current.y * maxRotation - Math.PI / 20;
-      camera.rotation.y = -mouse.current.x * maxRotation + rotationYoffset;
+  // Calculate desired rotation based on mouse position
+  const desiredRotationX = -mouse.current.y * maxRotationX - Math.PI / 20;
+  // Add Math.PI to desiredRotationY to turn the camera 180 degrees around the Y axis
+  const desiredRotationY = (-mouse.current.x * maxRotationY) + Math.PI;
 
-      let distanceToMove = camera.position.z - positionZ.current;
-      if (distanceToMove){
-        let movementVector = currentTrack.direction.clone().multiplyScalar(distanceToMove);
-        camera.position.add(movementVector);      
-      }
-      //camera.position.z = Math.min(Math.max(positionZ.current, currentTrack.cameraMin), currentTrack.cameraMax);
-      camera.position.y = 3;
-      console.log(camera.position.z)
+  // Calculate a target position for the camera to look at based on desired rotation
+  const lookAtPosition = new THREE.Vector3(
+    camera.position.x + Math.sin(desiredRotationY + rotationYoffset), // Adjust for desired Y rotation, including the 180 degree turn
+    camera.position.y + Math.sin(desiredRotationX), // Adjust for desired X rotation
+    camera.position.z + Math.cos(desiredRotationY + rotationYoffset) // Ensure the camera rotates around itself
+  );
 
+  // Make the camera look at the calculated position
+  camera.lookAt(lookAtPosition);
+
+  // Handle camera movement along the track
+  let distanceToMove = camera.position.z - positionZ.current;
+  if (distanceToMove) {
+    let movementVector = currentTrack.direction.clone().multiplyScalar(distanceToMove);
+    camera.position.add(movementVector);
+  }
+
+  camera.position.y = 3; // Keep the camera's height constant
     });
 
     camera.near = 1;
@@ -112,44 +157,54 @@ const tracks = [
     return null;
   }
 
-  function CarPositionUpdater({ carRef }) {
+  function CarPositionUpdater({ carRef, currentTrack, setUseCarLights }) {
     // Use a ref to keep track of the previous position of the camera
     const prevCameraZRef = useRef(null);
     // Use a ref to store the direction the camera is moving (1 for forward, -1 for backward)
     const cameraDirectionRef = useRef(0);
-    // Counter to ensure direction change is consistent
-    const directionChangeCounterRef = useRef(0);
-    // Threshold for how many frames to wait before confirming direction change
-    const directionChangeThreshold = 3;
+  
+    useEffect(() => {
+      // Set initial rotation based on the track's direction
+      if (currentTrack.name !== "main") {
+        carRef.current.rotation.y = currentTrack.rotation + Math.PI;
+      } else {
+        carRef.current.rotation.y = 0;
+      }
+    }, [currentTrack]);
   
     useFrame(({ camera }) => {
       if (carRef.current) {
-        carRef.current.position.z = camera.position.z - 6;
+        let offsetZ = 6 * Math.cos(currentTrack.rotation);
+        let offsetX = 6 * Math.sin(currentTrack.rotation);
+        carRef.current.position.z = camera.position.z - offsetZ;
+        carRef.current.position.x = camera.position.x - offsetX;
   
         if (prevCameraZRef.current !== null) {
           const currentDirection = camera.position.z > prevCameraZRef.current ? 1 : -1;
   
-          // Check if the direction has changed from the previous frame
+          // If the direction has changed, update the car's rotation to face the new direction
           if (cameraDirectionRef.current !== currentDirection) {
-            directionChangeCounterRef.current += 1;
-  
-            // Confirm the direction change if it has been consistent for enough frames
-            if (directionChangeCounterRef.current >= directionChangeThreshold) {
-              // Rotate the car by 180 degrees around the y-axis once the direction change is confirmed
-              carRef.current.rotation.y += Math.PI;
-              // Update the camera direction ref to the new direction
-              cameraDirectionRef.current = currentDirection;
-              // Reset the counter
-              directionChangeCounterRef.current = 0;
+            // Forward movement
+            if (currentDirection === 1) {
+              // Rotate to match the current track's direction
+              carRef.current.rotation.y = currentTrack.rotation;
+            } else {
+              // Backward movement
+              // Rotate to inverse direction (180 degrees from the track's direction)
+              carRef.current.rotation.y = currentTrack.rotation + Math.PI;
             }
-          } else {
-            // Reset the counter if the direction is consistent with the last known direction
-            directionChangeCounterRef.current = 0;
+  
+            // Update the camera direction ref to the new direction
+            cameraDirectionRef.current = currentDirection;
           }
         }
   
         // Update the previous camera position for the next frame
         prevCameraZRef.current = camera.position.z;
+  
+        // Toggle car lights based on the camera's Z position
+        // if (camera.position.z < -150) setUseCarLights(true);
+        // else setUseCarLights(false);
       }
     });
   }
@@ -184,10 +239,10 @@ const tracks = [
 
 function MainScene() {
     const carRef = useRef();
+    const [useCarLights, setUseCarLights] = useState(true); // Converted to state
     const spotlightRef = useRef();
 
-    let cameraMin = -300
-    let cameraMax = 10
+    const directionalLightRef = useRef(); // Ref for the light
 
     const [selectedObjects, setSelectedObjects] = useState([]);
     const [currentTrack, setCurrentTrack] = useState(tracks[0]); // Default to the first track
@@ -207,25 +262,34 @@ function MainScene() {
         >
         </div>
 
-      <Canvas shadows gammafactor={2.2}>
+      <Canvas shadows
+       gammafactor={2.2} 
+       antialias                 
+       onCreated={({ gl }) => {
+          gl.toneMapping = THREE.ACESFilmicToneMapping;
+        }}>
 
       <ambientLight intensity={0.3} />
 
       <ClickHandler selectedObjects={selectedObjects} setCurrentTrack={setCurrentTrack} />
 
         <Sky
-          distance={450000}
-          exposure={0}
-          elevation={90}
+          turbidity={10}
+          rayleigh={3}
+          mieCoefficient={0.005}
+          mieDirectionalG={0.7}
+          elevation={0}
+          azimuth={180}
         />
         <Scene />
-        <Car ref={carRef} lightsOn={true} /> {/*          <Stars /> Include the Car component in your scene */}
-        <CameraController spotlightRef={spotlightRef} currentTrack={currentTrack} /> {/* Include the camera controller in your scene */}
-        <CarPositionUpdater carRef={carRef} />
+        <Car ref={carRef} lightsOn={useCarLights} /> {/*          <Stars /> Include the Car component in your scene */}
+        <CameraController spotlightRef={spotlightRef} currentTrack={currentTrack} setCurrentTrack={setCurrentTrack} directionalLightRef={directionalLightRef} /> {/* Include the camera controller in your scene */}
+        <CarPositionUpdater carRef={carRef} currentTrack={currentTrack} setCurrentTrack={setCurrentTrack} setUseCarLights={setUseCarLights} />
         <directionalLight
+          ref={directionalLightRef}
           castShadow // Enables shadow casting
           position={[0, 100, 0]} // Position of the sun at midday
-          intensity={2} // Brightness of the sun
+          intensity={3} // Brightness of the sun
           color={0xffffff} // Color of sunlight at noon
           shadow-mapSize-width={2048} // Width of the shadow map
           shadow-mapSize-height={2048} // Height of the shadow map
