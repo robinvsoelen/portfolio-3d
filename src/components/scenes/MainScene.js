@@ -8,6 +8,8 @@ import ResourceHandler from '../3D/ResourceHandler'; // Import the ResourceHandl
 import * as THREE from 'three';
 import '../styles.css'
 import MainContentBrowser from '../UI/MainContentBrowser';
+import Taskbar from '../UI/TaskBar';
+import { v4 as uuidv4 } from 'uuid';
 
 const tracks = [
   {
@@ -94,7 +96,7 @@ function CarPositionUpdater({ carRef, currentTrack, setUseCarLights }) {
 
 
 
-const ClickHandler = ({ selectedObjects, setSelectedObjects, setCurrentTrack, setShowContent, setSelectedContent }) => {
+const ClickHandler = ({ selectedObjects, setSelectedObjects, setCurrentTrack, setShowContent, setSelectedContent, setOpenWindows, openWindows }) => {
   const { gl } = useThree();
 
   useEffect(() => {
@@ -108,8 +110,9 @@ const ClickHandler = ({ selectedObjects, setSelectedObjects, setCurrentTrack, se
           });
         }
         if (selectedObjects[0].userData.click.contentBrowser) {
-          setShowContent(true);
-          setSelectedContent(selectedObjects[0].userData)
+          const windowWithId = { ...selectedObjects[0].userData, id: uuidv4() }; // Assign a unique ID
+          setOpenWindows([...openWindows, windowWithId]);
+          console.log(openWindows)
         }
       }
     };
@@ -132,15 +135,15 @@ function MainScene() {
 
   const directionalLightRef = useRef(); // Ref for the light
 
-  const [showContent, setShowContent] = useState(false);
   const [selectedObjects, setSelectedObjects] = useState([]);
   const [selectedContent, setSelectedContent] = useState([]);
 
   const [currentTrack, setCurrentTrack] = useState(tracks[0]); // Default to the first track
 
-
   const [loaded, setLoaded] = useState(false);
   const [loadingProgress, setLoadingProgress] = useState(0);
+
+  const [openWindows, setOpenWindows] = useState([]);
 
   return (
     <div style={{ height: "100vh", position: 'relative' }}>
@@ -157,10 +160,6 @@ function MainScene() {
         </div>
       )}
 
-      {showContent &&
-        <MainContentBrowser title={selectedContent.text} setShowContent={setShowContent}>
-          {selectedContent.click.content}
-        </MainContentBrowser>}
 
       <Canvas shadows
         gammafactor={2.2}
@@ -171,7 +170,7 @@ function MainScene() {
 
         <ambientLight intensity={0.3} />
 
-        <ClickHandler selectedObjects={selectedObjects} setCurrentTrack={setCurrentTrack} setShowContent={setShowContent} setSelectedContent={setSelectedContent}/>
+        <ClickHandler selectedObjects={selectedObjects} setCurrentTrack={setCurrentTrack}  setSelectedContent={setSelectedContent} setOpenWindows={setOpenWindows} openWindows={openWindows}/>
 
         <Sky
           turbidity={10}
@@ -182,7 +181,7 @@ function MainScene() {
           azimuth={180}
         />
         <Car ref={carRef} lightsOn={useCarLights} /> {/*          <Stars /> Include the Car component in your scene */}
-        <CameraController tracks={tracks} spotlightRef={spotlightRef} currentTrack={currentTrack} setCurrentTrack={setCurrentTrack} directionalLightRef={directionalLightRef} showContent={showContent} /> {/* Include the camera controller in your scene */}
+        <CameraController tracks={tracks} spotlightRef={spotlightRef} currentTrack={currentTrack} setCurrentTrack={setCurrentTrack} directionalLightRef={directionalLightRef} /> {/* Include the camera controller in your scene */}
         <CarPositionUpdater carRef={carRef} currentTrack={currentTrack} setCurrentTrack={setCurrentTrack} setUseCarLights={setUseCarLights} />
         <directionalLight
           ref={directionalLightRef}
@@ -204,6 +203,7 @@ function MainScene() {
 
       </Canvas>
 
+      <Taskbar openWindows={openWindows} setOpenWindows={setOpenWindows} />
 
     </div>
   );

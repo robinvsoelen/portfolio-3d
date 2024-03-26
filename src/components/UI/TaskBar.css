@@ -1,0 +1,33 @@
+.taskbar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(0,0,0,0.8); /* Dark background for the taskbar */
+    color: white;
+    display: flex;
+    align-items: center;
+    padding: 15px 10px;
+    height: 40px;
+    z-index: 1000; /* Ensure it sits above other content */
+  }
+  
+  .start-button {
+    cursor: pointer;
+    padding: 15px 10px;
+    background-color: #ffffff; /* Slightly darker button for contrast */
+    margin-right: 10px;
+  }
+
+  .window-icon {
+    cursor: pointer;
+    background-color: #ffffff; /* Slightly darker button for contrast */
+    margin-right: 10px;
+    padding: 15px 10px;
+    color:black;
+  }
+
+  .taskbar-window-icon .icon, .taskbar-window-icon img {
+    width: 24px; /* Example size */
+    height: 24px;
+  }

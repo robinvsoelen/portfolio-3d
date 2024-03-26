@@ -4,7 +4,6 @@
   background-color: #c0c0c0;
   width: 80%;
   height: 60%;
-  margin: 20px auto;
   display: flex;
   flex-direction: column;
   z-index: 10;
@@ -20,7 +19,39 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  cursor: move;
 }
+
+.mainContentBrowser::-webkit-scrollbar {
+  width: 16px;
+  background-color: #C0C0C0;
+}
+
+.mainContentBrowser::-webkit-scrollbar-thumb {
+  background-color: #808080;
+  border: 3px solid #C0C0C0;
+  border-radius: 0px;
+}
+
+.mainContentBrowser::-webkit-scrollbar-button {
+  background-color: #C0C0C0;
+  border: 1px solid #808080;
+}
+
+.mainContentBrowser::-webkit-scrollbar-corner {
+  background-color: black;
+}
+
+
+/* Additional styling to complete the Windows 98 look */
+.mainContentBrowser {
+  font-family: 'MS Sans Serif', Geneva, sans-serif;
+  color: #000000;
+  background-color: #C0C0C0;
+  scrollbar-width: auto;
+  scrollbar-color: #808080 #C0C0C0;
+}
+
 
 .windowControls {
   display: flex;
@@ -42,10 +73,18 @@
 }
 
 .content {
+  display: flex; /* Use Flexbox */
+  justify-content: center; /* Center horizontally */
   background-color: #fff;
   flex-grow: 1;
   padding: 20px;
-  overflow: auto;
+  overflow-y: auto; /* Ensure scrollbar appears when content overflows */
+}
+
+.article {
+  width: 70%;
+  left: 50%;
+
 }
 
 .searchBar {
@@ -71,4 +110,22 @@
 
 .searchBar button:hover {
   background-color: #0000ff;
+}
+
+.resizeHandle.right {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 10px;
+  cursor: ew-resize;
+}
+
+.resizeHandle.bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 10px;
+  cursor: ns-resize;
 }
