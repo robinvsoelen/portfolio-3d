@@ -19,6 +19,20 @@ import { AfterimagePass } from 'three/examples/jsm/postprocessing/AfterimagePass
 
 
 const resources = [
+  {
+    name: 'mainScene', 
+    path: 'assets/models/scene/scene.glb', 
+    userData: { 
+      text: '',
+      position: { x: 0, y: 0.5, z: 0 },
+      scale: { x: 1, y: 1, z: 1 },
+      rotation: { x: 0, y: -Math.PI / 2, z: 0 }, 
+      click: {
+        changeDirection: "cv",
+      },
+      isInteractable: false
+    }
+  },
   { 
     name: 'gotocv', 
     path: 'assets/models/direction sign.glb', 
@@ -26,10 +40,11 @@ const resources = [
       text: 'Go to my CV',
       position: { x: -4, y: 1.3, z: -75 },
       scale: { x: 0.1, y: 0.1, z: 0.1 },
-      rotation: { x: 0, y: -Math.PI / 2, z: 0 }, // Euler angles in radians
+      rotation: { x: 0, y: -Math.PI / 2, z: 0 }, 
       click: {
         changeDirection: "cv",
-      }
+      },
+      isInteractable: true
     } 
   },
   { 
@@ -39,10 +54,11 @@ const resources = [
       text: 'View my projects',
       position: { x: 4, y: 1.3, z: -190 },
       scale: { x: 0.1, y: 0.1, z: 0.1 },
-      rotation: { x: 0, y: Math.PI / 2, z: 0 }, // Euler angles in radians
+      rotation: { x: 0, y: Math.PI / 2, z: 0 }, 
       click: {
         changeDirection: "projects",
-      }
+      },
+      isInteractable: true
     } 
   },
   { 
@@ -52,10 +68,11 @@ const resources = [
       text: 'Check out my music',
       position: { x: -4, y: 1.3, z: -325 },
       scale: { x: 0.1, y: 0.1, z: 0.1 },
-      rotation: { x: 0, y: -Math.PI / 2, z: 0 }, // Euler angles in radians
+      rotation: { x: 0, y: -Math.PI / 2, z: 0 },
       click: {
         changeDirection: "music",
-      }
+      },
+      isInteractable: true
     } 
   },
   { 
@@ -65,15 +82,17 @@ const resources = [
       text: 'University of Twente',
       position: { x: -20, y: 0, z: -100 },
       scale: { x: 3, y: 3, z: 3 },
-      rotation: { x: Math.PI / 2, y: 0, z: 0 }, // Euler angles in radians
+      rotation: { x: Math.PI / 2, y: 0, z: 0 }, 
       click: {
-        changeDirection: "work",
-      }
+        contentBrowser: true,
+        content: "blablabla very nice article",
+      },
+      isInteractable: true
     } 
   },
 ];
 
-function ResourceHandler({selectedObjects, setSelectedObjects}) {
+function ResourceHandler({selectedObjects, setSelectedObjects, setLoaded, setLoadingProgress}) {
   const { scene, camera, gl } = useThree();
   const composerRef = useRef();
   const outlinePassRef = useRef();
@@ -164,18 +183,43 @@ function ResourceHandler({selectedObjects, setSelectedObjects}) {
   }, [scene, camera, gl]);
 
   useEffect(() => {
-    const resourcePlacer = new ResourcePlacer(scene, resources);
+    // Create an instance of LoadingManager
+    const manager = new THREE.LoadingManager();
+  
+    // Set up the loading manager's onLoad, onProgress, and onError callbacks
+    manager.onStart = (url, itemsLoaded, itemsTotal) => {
+      setLoadingProgress(0); // Reset progress on start
+    };
+  
+    manager.onLoad = () => {
+      setLoadingProgress(100); // Set progress to 100% when everything is loaded
+      setLoaded(true); // Indicate that loading is complete
+      console.log('All resources loaded');
+    };
+  
+    manager.onProgress = (url, itemsLoaded, itemsTotal) => {
+      const progress = (itemsLoaded / itemsTotal) * 100;
+      setLoadingProgress(progress);
+      console.log('Loading progress:', progress);
+    };
+  
+    manager.onError = (url) => {
+      console.log('There was an error loading ' + url);
+    };
+  
+    // Pass this manager to your loaders
+    const resourcePlacer = new ResourcePlacer(scene, resources, manager);
     resourcePlacer.addResourcesToScene().then(() => {
       console.log('Resources placed in the scene.');
     });
-
+  
     const updateSelectedObjects = (objects) => {
       setSelectedObjects(objects);
     };
-
-    // Instantiate your ModelInteractor or interaction management class with a callback
-    modelInteractor.current = new ModelInteractor(camera, scene, gl, updateSelectedObjects);
-  }, [scene, camera, gl]);
+  
+    // Make sure your ModelInteractor and ResourcePlacer properly use the manager
+    modelInteractor.current = new ModelInteractor(camera, scene, gl, updateSelectedObjects, manager);
+  }, [scene, camera, gl, setSelectedObjects]);
 
   // Update selected objects for the outline effect dynamically
   useEffect(() => {

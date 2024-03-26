@@ -2,9 +2,9 @@ import { ResourceManager } from './ResourceManager';
 import * as THREE from 'three';
 
 export class ResourcePlacer {
-  constructor(scene, resources) {
+  constructor(scene, resources, manager) {
     this.scene = scene;
-    this.resourceManager = new ResourceManager();
+    this.resourceManager = new ResourceManager(manager);
     this.resources = resources;
   }
 

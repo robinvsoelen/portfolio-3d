@@ -52,7 +52,7 @@ export class ModelInteractor {
               object = object.parent;
             }
           
-            if (object && object.userData.text) {
+            if (object && object.userData.text && object.userData.isInteractable) {
               // Use the callback to update the selected objects in React's state
               this.selectedObjects = [object];
               this.onSelectedObjectsChange(this.selectedObjects); // Notify React component
@@ -77,8 +77,6 @@ export class ModelInteractor {
         const tooltip = document.getElementById('tooltip');
         if (tooltip) {
             tooltip.style.display = 'block';
-            tooltip.style.left = `${position.x}px`;
-            tooltip.style.top = `${position.y}px`;
             tooltip.innerText = text;
         }
     }

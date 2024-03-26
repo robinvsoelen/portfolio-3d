@@ -1,11 +1,11 @@
 import React, { useState, useEffect, forwardRef } from 'react';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
-const Car = forwardRef(({ lightsOn }, ref) => {
+const Car = forwardRef(({ lightsOn, LoadManager }, ref) => {
     const [carModel, setCarModel] = useState(null);
 
     useEffect(() => {
-        const loader = new GLTFLoader();
+        const loader = new GLTFLoader(LoadManager);
         loader.setPath("assets/models/car/");
 
         loader.load(

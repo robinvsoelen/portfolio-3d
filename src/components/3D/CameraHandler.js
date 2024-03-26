@@ -58,7 +58,7 @@ export default function CameraController({ currentTrack, setCurrentTrack, direct
   useEffect(() => {
     let frameId = null;
     let speed = 0; // Current speed, updated when scrolling
-    const friction = 0.85; // Friction factor, controls how quickly the speed decelerates
+    const friction = 0.9; // Friction factor, controls how quickly the speed decelerates
     // Handle touch start
     const handleTouchStart = (event) => {
       if (event.touches.length > 0) {
@@ -69,7 +69,7 @@ export default function CameraController({ currentTrack, setCurrentTrack, direct
 
     const updatePosition = () => {
       speed *= friction; // Apply friction to speed to simulate deceleration
-      positionZ.current += speed; // Update the camera's position based on the current speed
+      positionZ.current -= speed; // Update the camera's position based on the current speed
       positionZ.current = Math.min(Math.max(positionZ.current, currentTrackRef.current.cameraMin), currentTrackRef.current.cameraMax);
 
       if (Math.abs(speed) > 0.001) {
@@ -86,17 +86,20 @@ export default function CameraController({ currentTrack, setCurrentTrack, direct
     const handleTouchMove = (event) => {
       if (event.touches.length > 0) {
         const { clientX, clientY } = event.touches[0];
-        const deltaX = touchStart.current.x - clientX;
-        const deltaY = touchStart.current.y - clientY;
+        let deltaX = touchStart.current.x - clientX;
+        let deltaY = touchStart.current.y - clientY;
+
+        if (Math.abs(deltaX) < Math.abs(deltaY)) deltaX = 0;
+        if (Math.abs(deltaY) < Math.abs(deltaX)) deltaY = 0;
 
         // On mobile or tablet, horizontal swipe to rotate and vertical swipe to zoom
         if (isMobile || isTablet) {
-          rotationY.current += deltaX * 0.01; // Adjust rotation sensitivity as needed
+          rotationY.current -= deltaX * 0.01; // Adjust rotation sensitivity as needed
         }
 
         touchStart.current = { x: clientX, y: clientY };
 
-        speed -= (deltaY * 0.03); // Update speed based on the wheel movement
+        speed -= (deltaY * 0.05); // Update speed based on the wheel movement
         if (!frameId) {
           frameId = requestAnimationFrame(updatePosition);
         }
@@ -145,7 +148,7 @@ export default function CameraController({ currentTrack, setCurrentTrack, direct
 
     const updatePosition = () => {
       speed *= friction; // Apply friction to speed to simulate deceleration
-      positionZ.current -= speed; // Update the camera's position based on the current speed
+      positionZ.current += speed; // Update the camera's position based on the current speed
       positionZ.current = Math.min(Math.max(positionZ.current, currentTrackRef.current.cameraMin), currentTrackRef.current.cameraMax);
 
       if (Math.abs(speed) > 0.001) {

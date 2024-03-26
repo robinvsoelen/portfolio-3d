@@ -1,8 +1,10 @@
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { LoadingManager } from 'three';
 
 export class ResourceManager {
-  constructor() {
-    this.loader = new GLTFLoader();
+  constructor(manager = new LoadingManager()) {
+    this.manager = manager;
+    this.loader = new GLTFLoader(this.manager); // Pass the LoadingManager to the GLTFLoader
     this.resources = new Map();
   }
 

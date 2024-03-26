@@ -1,0 +1,81 @@
+.MyName {
+    position: absolute;
+    background: rgba(0,0,0,0);
+    z-index: 10;
+    color: rgba(0,0,0, 1);
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 40px;
+    font-family: "PT Serif", serif;
+    font-weight: 200;
+    font-style: normal;
+}
+
+.LoadingContainer {
+    width: 100%;
+    height: 100%;
+    background: rgba(255,255,255,0.5);
+    transition: 2s;
+}
+.LoadingContainer.fadeOut {
+    opacity: 0;
+    transition: 2s;
+}
+
+
+.LoadingText {
+    position:absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 30px;
+    font-family: "PT Serif", serif;
+    font-weight: 200;
+    font-style: normal;
+}
+
+.lds-dual-ring {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%);
+}
+
+.lds-dual-ring:after {
+    content: " ";
+    display: block;
+    width: 128px;
+    height: 128px;
+    margin: 8px;
+    border-radius: 50%;
+    border: 6px solid #000000;
+    border-color: #000000 transparent #000000 transparent;
+    animation: lds-dual-ring 1.2s linear infinite;
+  }
+  @keyframes lds-dual-ring {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+#tooltip {
+    position: absolute;
+    padding: 5px;
+    color: rgba(255,255,255, 0.5);
+    border: 3px solid rgba(255,255,255, 0.5);
+    border-radius: 5px;
+    pointer-events: none;
+    z-index: 100;
+    display: none;
+    font-size: 30px;
+    font-family: "PT Serif", serif;
+    font-weight: 200;
+    font-style: normal;
+    bottom: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+}

@@ -3,12 +3,11 @@ import React, { useRef, useEffect, useMemo, useState } from 'react';
 import { Canvas, useThree, useFrame } from '@react-three/fiber';
 import { Stars, Sky } from '@react-three/drei';
 import { Car } from '../3D/CarModel'; // Adjust the import path according to your project structure
-import { Scene } from '../3D/SceneModel'; // Adjust the import path according to your project structure
-import  CameraController from '../3D/CameraHandler'; // Adjust the import path according to your project structure
+import CameraController from '../3D/CameraHandler'; // Adjust the import path according to your project structure
 import ResourceHandler from '../3D/ResourceHandler'; // Import the ResourceHandler component
 import * as THREE from 'three';
-import { isMobile, isTablet } from 'react-device-detect';
-
+import '../styles.css'
+import MainContentBrowser from '../UI/MainContentBrowser';
 
 const tracks = [
   {
@@ -40,7 +39,6 @@ const tracks = [
     rotation: Math.PI / 4 // Moving at a 45-degree angle
   },
 ];
-
 
 function CarPositionUpdater({ carRef, currentTrack, setUseCarLights }) {
   // Use a ref to keep track of the previous position of the camera
@@ -96,7 +94,7 @@ function CarPositionUpdater({ carRef, currentTrack, setUseCarLights }) {
 
 
 
-const ClickHandler = ({ selectedObjects, setSelectedObjects, setCurrentTrack }) => {
+const ClickHandler = ({ selectedObjects, setSelectedObjects, setCurrentTrack, setShowContent, setSelectedContent }) => {
   const { gl } = useThree();
 
   useEffect(() => {
@@ -108,6 +106,10 @@ const ClickHandler = ({ selectedObjects, setSelectedObjects, setCurrentTrack }) 
             const foundTrack = tracks.find(track => track.name === selectedObjects[0].userData.click.changeDirection);
             return foundTrack;
           });
+        }
+        if (selectedObjects[0].userData.click.contentBrowser) {
+          setShowContent(true);
+          setSelectedContent(selectedObjects[0].userData)
         }
       }
     };
@@ -130,23 +132,35 @@ function MainScene() {
 
   const directionalLightRef = useRef(); // Ref for the light
 
+  const [showContent, setShowContent] = useState(false);
   const [selectedObjects, setSelectedObjects] = useState([]);
+  const [selectedContent, setSelectedContent] = useState([]);
+
   const [currentTrack, setCurrentTrack] = useState(tracks[0]); // Default to the first track
 
+
+  const [loaded, setLoaded] = useState(false);
+  const [loadingProgress, setLoadingProgress] = useState(0);
+
   return (
-    <div style={{ height: "100vh" }}>
-      <div
-        id={"tooltip"}
-        style={{
-          position: 'absolute',
-          backgroundColor: 'white',
-          padding: '5px',
-          border: '1px solid black',
-          pointerEvents: 'none', // Ignore mouse events
-          zIndex: '100',
-        }}
-      >
-      </div>
+    <div style={{ height: "100vh", position: 'relative' }}>
+      <div id={"tooltip"} ></div>
+
+      {!loaded && (
+        <div className={`LoadingContainer ${loaded ? 'fadeOut' : ''}`}>
+          <div className='MyName'>
+            Robin van Soelen
+          </div>
+          <div className="lds-dual-ring">
+            <div className='LoadingText'>{loadingProgress.toFixed(0)}%</div>
+          </div>
+        </div>
+      )}
+
+      {showContent &&
+        <MainContentBrowser title={selectedContent.text} setShowContent={setShowContent}>
+          {selectedContent.click.content}
+        </MainContentBrowser>}
 
       <Canvas shadows
         gammafactor={2.2}
@@ -157,7 +171,7 @@ function MainScene() {
 
         <ambientLight intensity={0.3} />
 
-        <ClickHandler selectedObjects={selectedObjects} setCurrentTrack={setCurrentTrack} />
+        <ClickHandler selectedObjects={selectedObjects} setCurrentTrack={setCurrentTrack} setShowContent={setShowContent} setSelectedContent={setSelectedContent}/>
 
         <Sky
           turbidity={10}
@@ -167,9 +181,8 @@ function MainScene() {
           elevation={0}
           azimuth={180}
         />
-        <Scene />
         <Car ref={carRef} lightsOn={useCarLights} /> {/*          <Stars /> Include the Car component in your scene */}
-        <CameraController tracks={tracks} spotlightRef={spotlightRef} currentTrack={currentTrack} setCurrentTrack={setCurrentTrack} directionalLightRef={directionalLightRef} /> {/* Include the camera controller in your scene */}
+        <CameraController tracks={tracks} spotlightRef={spotlightRef} currentTrack={currentTrack} setCurrentTrack={setCurrentTrack} directionalLightRef={directionalLightRef} showContent={showContent} /> {/* Include the camera controller in your scene */}
         <CarPositionUpdater carRef={carRef} currentTrack={currentTrack} setCurrentTrack={setCurrentTrack} setUseCarLights={setUseCarLights} />
         <directionalLight
           ref={directionalLightRef}
@@ -187,9 +200,11 @@ function MainScene() {
           shadow-camera-bottom={-100} // Bottom plane of the shadow camera
           shadow-bias={-0.0001} // Reduces shadow acne
         />
-        <ResourceHandler selectedObjects={selectedObjects} setSelectedObjects={setSelectedObjects} />
+        <ResourceHandler selectedObjects={selectedObjects} setSelectedObjects={setSelectedObjects} setLoaded={setLoaded} setLoadingProgress={setLoadingProgress} />
 
       </Canvas>
+
+
     </div>
   );
 }
