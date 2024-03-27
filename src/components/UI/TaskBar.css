@@ -1,33 +1,172 @@
 .taskbar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background-color: rgba(0,0,0,0.8); /* Dark background for the taskbar */
-    color: white;
-    display: flex;
-    align-items: center;
-    padding: 15px 10px;
-    height: 40px;
-    z-index: 1000; /* Ensure it sits above other content */
-  }
-  
-  .start-button {
-    cursor: pointer;
-    padding: 15px 10px;
-    background-color: #ffffff; /* Slightly darker button for contrast */
-    margin-right: 10px;
-  }
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-image: linear-gradient(to bottom, #c0c0c0, #808080);
+  color: white;
+  display: flex;
+  align-items: center;
+  padding: 15px 10px;
+  height: 40px;
+  z-index: 1000;
+  /* Ensure it sits above other content */
+}
 
-  .window-icon {
-    cursor: pointer;
-    background-color: #ffffff; /* Slightly darker button for contrast */
-    margin-right: 10px;
-    padding: 15px 10px;
-    color:black;
-  }
+.window-icon {
+  cursor: pointer;
+  margin-right: 10px;
+  padding: 10px 10px;
+  border-radius: 3px;
+  color: black;
+  background-color: #C0C0C0;
+  border-left: 2px solid #ffffff;
+  border-top: 2px solid #ffffff;
+  border-right: 2px solid #808080;
+  border-bottom: 2px solid #808080;
+  color: black;
+  font-family: "MS Sans Serif", Geneva, sans-serif;
+  font-size: 12px;
+  cursor: pointer;
+  user-select: none;
+}
 
-  .taskbar-window-icon .icon, .taskbar-window-icon img {
-    width: 24px; /* Example size */
-    height: 24px;
-  }
+.window-icon:active,
+.window-icon.pressed {
+  border-left: 2px solid #808080;
+  border-top: 2px solid #808080;
+  border-right: 2px solid #ffffff;
+  border-bottom: 2px solid #ffffff;
+  color: black;
+}
+
+
+.start-menu {
+  position: absolute;
+  bottom: 75px;
+  /* Adjust based on your taskbar's height */
+  left: 0;
+  width: 200px;
+  /* Adjust the width as needed */
+  background-color: #C0C0C0;
+  border: 1px solid black;
+  box-shadow: 2px 2px 0px #000;
+  padding: 10px;
+  z-index: 1000;
+  /* Ensure it appears above other elements */
+}
+
+.menu-item {
+  padding: 5px;
+  color: black;
+  border: 1px solid transparent;
+  /* For highlighting */
+  margin-bottom: 2px;
+}
+
+.menu-item:hover {
+  background-color: #000080;
+  color: white;
+  cursor: pointer;
+}
+
+.taskbar-break {
+  margin-left: 4px;
+  margin-right: 15px;
+  color: #C0C0C0;
+}
+
+#tooltip {
+  position: absolute;
+  padding: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  background-color: #C0C0C0;
+  color: #000000;
+  border-radius: 5px;
+  pointer-events: none;
+  z-index: 100;
+  display: none;
+  font-size: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 2px solid #808080;
+  /* Dark left border */
+  border-top: 2px solid #808080;
+  /* Dark top border */
+  border-right: 2px solid #ffffff;
+  /* Light right border */
+  border-bottom: 2px solid #ffffff;
+}
+
+.taskbar-time {
+  position: absolute;
+  right: 30px;
+  padding: 5px 20px;
+  background-color: #C0C0C0;
+  color: #000000;
+  border-radius: 5px;
+  pointer-events: none;
+  border-left: 2px solid #808080;
+  border-top: 2px solid #808080;
+  border-right: 2px solid #ffffff;
+  border-bottom: 2px solid #ffffff;  /* Additional styling as needed to match your taskbar */
+}
+
+.message-box {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  padding-bottom: 10px;
+  border: 2px solid;
+  background-color: #C0C0C0;
+  color: black;
+  font-family: "MS Sans Serif", Geneva, sans-serif;
+  font-size: 14px;
+  width: 300px; /* Or your preferred width */
+  z-index: 100;
+  transform: translateX(-50%);
+}
+.message-title-bar {
+  background-image: linear-gradient(to right, #ff00cc , #00fffb);
+  color: white;
+  padding: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: move;
+}
+.message-content {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px; /* Space between message and buttons */
+  padding: 10px;
+
+}
+
+.message-buttons {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.message-button {
+  margin-right: 5px;
+  background-color: #C0C0C0;
+  border: 1px solid #000;
+  color: black;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-right: 2px solid #808080;
+  border-bottom: 2px solid #808080;
+  border-left: 2px solid #ffffff;
+  border-top: 2px solid #ffffff;
+}
+
+.message-button:active,
+.message-button.pressed {
+  border-left: 2px solid #808080;
+  border-top: 2px solid #808080;
+  border-right: 2px solid #ffffff;
+  border-bottom: 2px solid #ffffff;
+  color: black;
+}

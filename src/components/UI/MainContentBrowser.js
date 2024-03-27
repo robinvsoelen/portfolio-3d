@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './MainContentBrowser.css'; // Make sure to create this CSS file
 
-const MainContentBrowser = ({windowId, title, setShowContent, articleFilename, onClose, visibleWindows, toggleWindowVisibility }) => {
+const MainContentBrowser = ({windowId, title, setShowContent, articleFilename, onClose, visibleWindows, toggleWindowVisibility, bringToFront }) => {
   const [searchQuery, setSearchQuery] = useState(`${process.env.PUBLIC_URL}/articles/${articleFilename}`);
 
 
@@ -40,15 +40,15 @@ const MainContentBrowser = ({windowId, title, setShowContent, articleFilename, o
   const [startResizePosition, setStartResizePosition] = useState({ x: 0, y: 0 });
   const [startSize, setStartSize] = useState({ width: 0, height: 0 });
   const [currentResizeDirection, setCurrentResizeDirection] = useState('');
-  const [size, setSize] = useState({ width: 1000, height: 800 }); // Default width and height can be your starting size
+  const [size, setSize] = useState({ width: 800, height: 600 }); // Default width and height can be your starting size
 
   const [isFullscreen, setIsFullscreen] = useState(false); // Default width and height can be your starting size
 
   useEffect(() => {
     // Calculate center position
     const calculateCenterPosition = () => {
-      const x = (window.innerWidth - document.querySelector('.mainContentBrowser').offsetWidth) / 2;
-      const y = (window.innerHeight - document.querySelector('.mainContentBrowser').offsetHeight) / 2;
+      const x = (window.innerWidth - document.querySelector('.mainContentBrowser').offsetWidth) / 4 + (Math.random() * 200);
+      const y = (window.innerHeight - document.querySelector('.mainContentBrowser').offsetHeight) / 8 + + (Math.random() * 200);
       setPosition({ x, y });
       setStartPosition({ x, y });
     };
@@ -152,6 +152,7 @@ const MainContentBrowser = ({windowId, title, setShowContent, articleFilename, o
   return (
     <div
     className="mainContentBrowser"
+    onMouseDown={() => bringToFront(windowId)} // Apply onMouseDown to the root div
     style={{
       left: isFullscreen ? '0px' : `${position.x}px`,
       top: isFullscreen ? '0px' : `${position.y}px`,
@@ -160,6 +161,7 @@ const MainContentBrowser = ({windowId, title, setShowContent, articleFilename, o
       transform: 'none', // Adjust or remove transform based on fullscreen state
       position: isFullscreen ? 'fixed' : 'absolute', // Use fixed positioning for fullscreen to cover the entire screen
       margin: isFullscreen ? '0px' : '20px', // Use fixed positioning for fullscreen to cover the entire screen
+      zIndex: visibleWindows.get(windowId)?.zIndex || 1, // Fallback to 1 if not set
       display: visibleWindows.get(windowId) ? 'flex' : 'none'// Conditionally render based on visibility
 
     }}

@@ -10,6 +10,7 @@ import '../styles.css'
 import MainContentBrowser from '../UI/MainContentBrowser';
 import Taskbar from '../UI/TaskBar';
 import { v4 as uuidv4 } from 'uuid';
+import { isMobile } from 'react-device-detect';
 
 const tracks = [
   {
@@ -96,7 +97,7 @@ function CarPositionUpdater({ carRef, currentTrack, setUseCarLights }) {
 
 
 
-const ClickHandler = ({ selectedObjects, setSelectedObjects, setCurrentTrack, setShowContent, setSelectedContent, setOpenWindows, openWindows }) => {
+const ClickHandler = ({ selectedObjects, setSelectedObjects, setCurrentTrack, setShowContent, setSelectedContent, setOpenWindows, openWindows, foundRadio, setFoundRadio }) => {
   const { gl } = useThree();
 
   useEffect(() => {
@@ -109,10 +110,13 @@ const ClickHandler = ({ selectedObjects, setSelectedObjects, setCurrentTrack, se
             return foundTrack;
           });
         }
-        if (selectedObjects[0].userData.click.contentBrowser) {
+        if (selectedObjects[0].userData.click.contentBrowser && ((isMobile && openWindows.length < 1) || (!isMobile && openWindows.length < 4))) {
           const windowWithId = { ...selectedObjects[0].userData, id: uuidv4() }; // Assign a unique ID
           setOpenWindows([...openWindows, windowWithId]);
           console.log(openWindows)
+        }
+        if (selectedObjects[0].userData.click.isRadio && !foundRadio) {
+          setFoundRadio(true);
         }
       }
     };
@@ -145,9 +149,11 @@ function MainScene() {
 
   const [openWindows, setOpenWindows] = useState([]);
 
+  const [foundRadio, setFoundRadio] = useState(false);
+
+
   return (
     <div style={{ height: "100vh", position: 'relative' }}>
-      <div id={"tooltip"} ></div>
 
       {!loaded && (
         <div className={`LoadingContainer ${loaded ? 'fadeOut' : ''}`}>
@@ -170,7 +176,7 @@ function MainScene() {
 
         <ambientLight intensity={0.3} />
 
-        <ClickHandler selectedObjects={selectedObjects} setCurrentTrack={setCurrentTrack}  setSelectedContent={setSelectedContent} setOpenWindows={setOpenWindows} openWindows={openWindows}/>
+        <ClickHandler selectedObjects={selectedObjects} setCurrentTrack={setCurrentTrack}  setSelectedContent={setSelectedContent} setOpenWindows={setOpenWindows} openWindows={openWindows} foundRadio={foundRadio} setFoundRadio={setFoundRadio}/>
 
         <Sky
           turbidity={10}
@@ -203,7 +209,7 @@ function MainScene() {
 
       </Canvas>
 
-      <Taskbar openWindows={openWindows} setOpenWindows={setOpenWindows} />
+      <Taskbar openWindows={openWindows} setOpenWindows={setOpenWindows} foundRadio={foundRadio} setFoundRadio={setFoundRadio}/>
 
     </div>
   );

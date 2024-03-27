@@ -61,21 +61,3 @@
       transform: rotate(360deg);
     }
   }
-  
-#tooltip {
-    position: absolute;
-    padding: 5px;
-    color: rgba(255,255,255, 0.5);
-    border: 3px solid rgba(255,255,255, 0.5);
-    border-radius: 5px;
-    pointer-events: none;
-    z-index: 100;
-    display: none;
-    font-size: 30px;
-    font-family: "PT Serif", serif;
-    font-weight: 200;
-    font-style: normal;
-    bottom: 10%;
-    left: 50%;
-    transform: translateX(-50%);
-}

@@ -1,5 +1,5 @@
-import React, { useRef, useEffect, useState } from 'react';
-import { useThree, useFrame, useLoader } from '@react-three/fiber';
+import React, { useRef, useEffect, useState, useMemo  } from 'react';
+import { useThree, useFrame} from '@react-three/fiber';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js';
@@ -18,6 +18,7 @@ import { BokehPass } from 'three/examples/jsm/postprocessing/BokehPass.js';
 import { AfterimagePass } from 'three/examples/jsm/postprocessing/AfterimagePass.js';
 import {objects} from '../objects'
 
+
 function ResourceHandler({selectedObjects, setSelectedObjects, setLoaded, setLoadingProgress}) {
   const { scene, camera, gl } = useThree();
   const composerRef = useRef();
@@ -27,6 +28,7 @@ function ResourceHandler({selectedObjects, setSelectedObjects, setLoaded, setLoa
   const deselectTime = 1000; 
 
   const modelInteractor = useRef(null);
+  const resourcePlacer = useRef(null);
 
 
   useEffect(() => {
@@ -134,8 +136,8 @@ function ResourceHandler({selectedObjects, setSelectedObjects, setLoaded, setLoa
     };
   
     // Pass this manager to your loaders
-    const resourcePlacer = new ResourcePlacer(scene, objects, manager);
-    resourcePlacer.addResourcesToScene().then(() => {
+    resourcePlacer.current = new ResourcePlacer(scene, objects, manager);
+    resourcePlacer.current.addResourcesToScene().then(() => {
       console.log('Resources placed in the scene.');
     });
   
@@ -158,9 +160,15 @@ function ResourceHandler({selectedObjects, setSelectedObjects, setLoaded, setLoa
     if (composerRef.current) {
       composerRef.current.render();
     }
+
+    if (modelInteractor.current){
+      resourcePlacer.current.resourceManager.update();
+
+    }
+
   }, 1);
 
-  return null;
+  return null
 }
 
 export default ResourceHandler;
