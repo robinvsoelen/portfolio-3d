@@ -70,7 +70,7 @@ useEffect(() => {
     if (currentTrack.name !== "main") {
       carRef.current.rotation.y = currentTrack.rotation + Math.PI + Math.PI / 2;
     } else {
-      carRef.current.rotation.y = Math.PI / 2;
+      carRef.current.rotation.y = - Math.PI / 2;
     }
   }, [currentTrack]);
 
@@ -255,7 +255,7 @@ function MainScene() {
 
       </Canvas>
 
-      <Taskbar openWindows={openWindows} setOpenWindows={setOpenWindows} foundRadio={foundRadio} setFoundRadio={setFoundRadio} carRef={carRef} foundGuitar={foundGuitar} />
+      {loaded && <Taskbar openWindows={openWindows} setOpenWindows={setOpenWindows} foundRadio={foundRadio} setFoundRadio={setFoundRadio} carRef={carRef} foundGuitar={foundGuitar} />}
 
     </div>
   );

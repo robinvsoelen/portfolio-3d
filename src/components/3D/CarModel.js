@@ -97,7 +97,7 @@ const Car = forwardRef(({ lightsOn, LoadManager }, ref) => {
     return (
         <group ref={ref}>
             {carModel && (
-                <primitive object={carModel} position={[0, 0.5, 0]} rotation={[0, Math.PI / 2, 0]} scale={1} />
+                <primitive object={carModel} position={[0, 0.5, 0]} rotation={[0, -Math.PI / 2, 0]} scale={1} />
             )}
         </group>
     );

@@ -156,7 +156,7 @@ export const objects = [
       userData: { 
         text: 'A guitar!',
         position: { x: 5, y: 0.5, z: -90 },
-        scale: { x: 0.8, y: 0.8, z: 0.8},
+        scale: { x: 0.5, y: 0.5, z: 0.5},
         rotation: { x: 0, y:  -Math.PI / 4 , z: 0 }, 
         click: {
           isGuitar: true,
@@ -205,6 +205,69 @@ export const objects = [
         click: {
           isExternalLink: true,
           link: 'https://open.spotify.com/artist/516xhWaAHvGv7PWbhCzkEW',
+        },
+        isInteractable: true,
+      } 
+    },
+    { 
+      name: 'Website car', 
+      path: 'assets/models/website car.glb', 
+      userData: { 
+        text: 'This website!',
+        position: { x: 40, y: 1, z: -235 },
+        scale: { x: 2, y: 2, z: 2},
+        rotation: { x: 0, y:  Math.PI /2 , z: 0 }, 
+        click: {
+          contentBrowser: true,
+          articleFilename: "website.html",
+        },
+        isInteractable: true,
+        hasAnimation: true,
+        animationName: 'waving'
+      } 
+    },
+    { 
+      name: 'Loading', 
+      path: 'assets/models/loading.glb', 
+      userData: { 
+        text: 'Loading...',
+        position: { x: -60, y: 0.5, z: -360 },
+        scale: { x: 0.8, y: 0.8, z: 0.8},
+        rotation: { x: Math.PI /2, y:  0, z: -Math.PI / 4  }, 
+        click: {
+          contentBrowser: true,
+          articleFilename: "loading.html",
+        },
+        isInteractable: true,
+        hasAnimation: true,
+      } 
+    },
+    { 
+      name: 'robovs', 
+      path: 'assets/models/robovs.glb', 
+      userData: { 
+        text: 'robovs',
+        position: { x: -30, y: 0, z: -365 },
+        scale: { x: 0.5, y: 0.5, z: 0.5},
+        rotation: { x: 0, y:  -Math.PI / 2, z: 0  }, 
+        click: {
+          contentBrowser: true,
+          articleFilename: "robovs.html",
+        },
+        isInteractable: true,
+      } 
+    },
+    { 
+      name: 'blandaband', 
+      path: 'assets/models/blandaband.glb', 
+      userData: { 
+        text: 'BlandaBand',
+        position: { x: 80, y: 1.5, z: -235 },
+        scale: { x: 1, y: 1, z: 1},
+        rotation: { x: 0, y:  Math.PI  , z: 0 }, 
+        click: {
+          contentBrowser: true,
+          articleFilename: "blandaband.html",
         },
         isInteractable: true,
       } 
