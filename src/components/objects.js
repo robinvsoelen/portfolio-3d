@@ -148,7 +148,65 @@ export const objects = [
           isRadio: true,
         },
         isInteractable: true,
-        hasAnimation: true,
+      } 
+    },
+    { 
+      name: 'Guitarr', 
+      path: 'assets/models/guitar.glb', 
+      userData: { 
+        text: 'A guitar!',
+        position: { x: 5, y: 0.5, z: -90 },
+        scale: { x: 0.8, y: 0.8, z: 0.8},
+        rotation: { x: 0, y:  -Math.PI / 4 , z: 0 }, 
+        click: {
+          isGuitar: true,
+        },
+        isInteractable: true,
+      } 
+    },
+    { 
+      name: 'Instagram', 
+      path: 'assets/models/instagram.glb', 
+      userData: { 
+        text: 'Instagram',
+        position: { x: 3.5, y: 0.5, z: -500 },
+        scale: { x: 50, y: 50, z: 50},
+        rotation: { x: Math.PI / 2, y:  0 , z: 0 }, 
+        click: {
+          isExternalLink: true,
+          link: 'https://www.instagram.com/robovs.music/',
+        },
+        isInteractable: true,
+      } 
+    },
+    { 
+      name: 'LinkedIn', 
+      path: 'assets/models/linkedin.glb', 
+      userData: { 
+        text: 'LinkedIn',
+        position: { x: -1.5, y: 0.5, z: -500 },
+        scale: { x: 500, y: 500, z: 500},
+        rotation: { x: Math.PI / 2, y:  0 , z: 0 }, 
+        click: {
+          isExternalLink: true,
+          link: 'https://www.linkedin.com/in/robin-van-soelen-08332274/',
+        },
+        isInteractable: true,
+      } 
+    },
+    { 
+      name: 'Spotify', 
+      path: 'assets/models/spotify.glb', 
+      userData: { 
+        text: 'Spotify',
+        position: { x: -6.5, y: 4, z: -500 },
+        scale: { x: 500, y: 500, z: 500},
+        rotation: { x: Math.PI / 2, y:  0 , z: 0 }, 
+        click: {
+          isExternalLink: true,
+          link: 'https://open.spotify.com/artist/516xhWaAHvGv7PWbhCzkEW',
+        },
+        isInteractable: true,
       } 
     },
   ];

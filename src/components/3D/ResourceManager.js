@@ -43,6 +43,7 @@ export class ResourceManager {
 
   // Get a loaded resource
   get(name) {
+    console.log(name)
     return this.resources.get(name);
   }
 

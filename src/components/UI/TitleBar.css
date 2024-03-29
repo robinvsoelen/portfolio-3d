@@ -1,0 +1,14 @@
+.titleBar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: #c0c0c0;
+    color: white;
+    display: flex;
+    align-items: center;
+    padding: 0px 10px;
+    height: 30px;
+    z-index: 1000;
+    /* Ensure it sits above other content */
+  }

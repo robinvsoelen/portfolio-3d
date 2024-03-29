@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import './Radio.css'; // Path to your Radio CSS
 
 const stations = [
-    { frequency: 88.1, name: "Classic Rock", streamUrl: "assets/audio/jazz.mp3" },
+    { frequency: 88.1, name: "Classic Rock", streamUrl: "assets/audio/chill-jazz.mp3" },
     { frequency: 92.5, name: "Jazz & Blues", streamUrl: "assets/audio/jazz.mp3" },
     { frequency: 95.8, name: "Pop Hits", streamUrl: "assets/audio/jazz.mp3" },
     // Add more stations as needed, with their corresponding MP3 URLs
@@ -10,13 +10,17 @@ const stations = [
 
 const Radio = () => {
   const [currentStationIndex, setCurrentStationIndex] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(true);
   const audioRef = useRef(new Audio());
+  const [hasLoaded, setHasLoaded] = useState(false);
 
   useEffect(() => {
     const currentStation = stations[currentStationIndex];
     audioRef.current.src = currentStation.streamUrl;
+    audioRef.current.volume = 0.5;
     audioRef.current.play()
       .catch(error => console.error("Playback failed", error));
+      setHasLoaded(true);
   }, [currentStationIndex]);
 
   const tuneStation = (direction) => {
@@ -28,6 +32,13 @@ const Radio = () => {
     });
   };
 
+  useEffect(() => {
+    if (hasLoaded) {
+        if (isPlaying) audioRef.current.play();
+        else  audioRef.current.pause();
+    }
+  }, [isPlaying])
+
   return (
     <div className="radio-container">
       <div className="station-display">
@@ -35,7 +46,8 @@ const Radio = () => {
       </div>
       <div className="tuning-controls">
         <img onClick={() => tuneStation(-1)} className='radio-button back'  src="assets/img/next.svg"></img>
-        <img src="assets/img/pause.svg" className='radio-button'></img>
+        {isPlaying && <img onClick={() => setIsPlaying(!isPlaying)} src="assets/img/pause.svg" className='radio-button'></img>}
+        {!isPlaying && <img onClick={() => setIsPlaying(!isPlaying)} src="assets/img/play.svg" className='radio-button'></img>}
         <img onClick={() => tuneStation(1)} className='radio-button' src="assets/img/next.svg"></img>
       </div>
     </div>

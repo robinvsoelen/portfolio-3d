@@ -15,6 +15,7 @@ export class ResourcePlacer {
       if (model) {
         const { position, scale, rotation, text, click } = resource.userData;
 
+        model.scene.name = resource.name;
         // Apply position
         model.scene.position.set(position.x, position.y, position.z);
 

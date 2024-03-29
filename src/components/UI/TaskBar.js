@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './TaskBar.css'; // Assuming you will put your CSS here
 import MainContentBrowser from './MainContentBrowser';
 import Radio from './Radio';
+import { Car } from '../3D/CarModel';
 
 const TaskBarWindowIcon = ({ window, toggleWindowVisibility, visibleWindows }) => {
   const isVisible = visibleWindows.get(window.id);
@@ -57,13 +58,14 @@ const MessageBox = ({ type, title, message, options }) => {
 };
 
 
-const Taskbar = ({ openWindows, setOpenWindows, hoverText, setFoundRadio, foundRadio }) => {
+const Taskbar = ({ openWindows, setOpenWindows, hoverText, setFoundRadio, foundRadio, carRef, foundGuitar }) => {
 
   const [showContent, setShowContent] = useState(false);
   const [showStart, setShowStart] = useState(false);
   const [highestZIndex, setHighestZIndex] = useState(0);
 
   const startIconClasses = `window-icon ${showStart ? 'pressed' : ''}`;
+
 
   const [visibleWindows, setVisibleWindows] = useState(() =>
     new Map(openWindows.map(window => [window.id, true]))
@@ -81,6 +83,14 @@ const Taskbar = ({ openWindows, setOpenWindows, hoverText, setFoundRadio, foundR
     });
     console.log(visibleWindows)
   };
+
+  const honk = () => {
+    carRef.current.onHonk();
+    const audio = new Audio();
+    audio.src = 'assets/audio/car-horn.mp3';
+    audio.volume = 0.8;
+    audio.play()
+  }
 
   useEffect(() => {
     setVisibleWindows(new Map(openWindows.map(window => [window.id, visibleWindows.get(window.id) ?? true])));
@@ -100,6 +110,8 @@ const Taskbar = ({ openWindows, setOpenWindows, hoverText, setFoundRadio, foundR
   const [currentTime, setCurrentTime] = useState(new Date());
 
   const [attachedRadio, setAttachedRadio] = useState(false);
+  const [attachedGuitar, setAttachedGuitar] = useState(false);
+
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -113,6 +125,11 @@ const Taskbar = ({ openWindows, setOpenWindows, hoverText, setFoundRadio, foundR
     setAttachedRadio(true);
     setFoundRadio(false);
   };
+
+  const attachGuitar = () => {
+    setAttachedGuitar(true);
+    carRef.current.foundGuitar();
+  }
 
   return (
     <div>
@@ -142,6 +159,16 @@ const Taskbar = ({ openWindows, setOpenWindows, hoverText, setFoundRadio, foundR
         ]}
       />
       }
+
+      {!attachedGuitar && foundGuitar && <MessageBox
+        type="info"
+        message="You just found a guitar!"
+        options={[
+          { label: 'Awesome!', onClick: attachGuitar },
+        ]}
+      />
+      }
+
       <div className="taskbar">
         <StartMenu
           isVisible={showStart}
@@ -175,7 +202,9 @@ const Taskbar = ({ openWindows, setOpenWindows, hoverText, setFoundRadio, foundR
         <div id={"tooltip"} ></div>
 
         {attachedRadio && <Radio />}
-
+        <div className='honk' onClick={() => honk()}>
+        <img className='honkImage' src={'assets/img/klaxon.svg'} width={45} height={45} />
+        </div>
         <div className="taskbar-time">
           {currentTime.toLocaleTimeString()}
         </div>

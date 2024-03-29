@@ -19,7 +19,7 @@ import { AfterimagePass } from 'three/examples/jsm/postprocessing/AfterimagePass
 import {objects} from '../objects'
 
 
-function ResourceHandler({selectedObjects, setSelectedObjects, setLoaded, setLoadingProgress}) {
+function ResourceHandler({selectedObjects, setSelectedObjects, setLoaded, setLoadingProgress, foundRadio, foundGuitar}) {
   const { scene, camera, gl } = useThree();
   const composerRef = useRef();
   const outlinePassRef = useRef();
@@ -29,6 +29,24 @@ function ResourceHandler({selectedObjects, setSelectedObjects, setLoaded, setLoa
 
   const modelInteractor = useRef(null);
   const resourcePlacer = useRef(null);
+
+  const removeObjectByName = (name) => {
+    const selectedObject = scene.getObjectByName(name);
+    console.log(name)
+
+    if (selectedObject) {
+      console.log("delete")
+      scene.remove(selectedObject);
+    }
+  };
+
+  useEffect(() => {
+    if (foundRadio) removeObjectByName('Radio')
+  }, [foundRadio]);
+
+  useEffect(() => {
+    if (foundGuitar) removeObjectByName('Guitarr')
+  }, [foundGuitar]);
 
 
   useEffect(() => {
