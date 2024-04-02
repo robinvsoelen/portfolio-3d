@@ -1,13 +1,12 @@
 // src/components/scenes/MainScene.js
-import React, { useRef, useEffect, useMemo, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { Canvas, useThree, useFrame } from '@react-three/fiber';
-import { Stars, Sky } from '@react-three/drei';
+import { Sky } from '@react-three/drei';
 import { Car } from '../3D/CarModel'; // Adjust the import path according to your project structure
 import CameraController from '../3D/CameraHandler'; // Adjust the import path according to your project structure
 import ResourceHandler from '../3D/ResourceHandler'; // Import the ResourceHandler component
 import * as THREE from 'three';
 import '../styles.css'
-import MainContentBrowser from '../UI/MainContentBrowser';
 import Taskbar from '../UI/TaskBar';
 import { v4 as uuidv4 } from 'uuid';
 import { isMobile } from 'react-device-detect';
@@ -136,7 +135,7 @@ useEffect(() => {
   });
 }
 
-const ClickHandler = ({ selectedObjects, setSelectedObjects, setCurrentTrack, setShowContent, setSelectedContent, setOpenWindows, openWindows, foundRadio, setFoundRadio, carRef, foundGuitar, setFoundGuitar, foundSurfboard, setFoundSurfboard }) => {
+const ClickHandler = ({ selectedObjects, setCurrentTrack, setOpenWindows, openWindows, foundRadio, setFoundRadio, carRef, foundGuitar, setFoundGuitar, foundSurfboard, setFoundSurfboard }) => {
   const { gl } = useThree();
 
   useEffect(() => {
@@ -188,7 +187,6 @@ function MainScene() {
   const directionalLightRef = useRef(); // Ref for the light
 
   const [selectedObjects, setSelectedObjects] = useState([]);
-  const [selectedContent, setSelectedContent] = useState([]);
 
   const [currentTrack, setCurrentTrack] = useState(tracks[0]); // Default to the first track
 
@@ -226,7 +224,7 @@ function MainScene() {
 
         <ambientLight intensity={0.3} />
 
-        <ClickHandler selectedObjects={selectedObjects} setCurrentTrack={setCurrentTrack}  setSelectedContent={setSelectedContent} setOpenWindows={setOpenWindows} openWindows={openWindows} foundRadio={foundRadio} setFoundRadio={setFoundRadio} carRef={carRef} foundGuitar={foundGuitar} setFoundGuitar={setFoundGuitar} foundSurfboard={foundSurfboard} setFoundSurfboard={setFoundSurfboard}/>
+        <ClickHandler selectedObjects={selectedObjects} setCurrentTrack={setCurrentTrack} setOpenWindows={setOpenWindows} openWindows={openWindows} foundRadio={foundRadio} setFoundRadio={setFoundRadio} carRef={carRef} foundGuitar={foundGuitar} setFoundGuitar={setFoundGuitar} foundSurfboard={foundSurfboard} setFoundSurfboard={setFoundSurfboard}/>
 
         <Sky
           turbidity={10}

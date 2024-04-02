@@ -32,7 +32,7 @@ const CreateArtwork = () => {
     await addDoc(collection(db, "artworks"), {
       imageUrl: url,
       artist: artist,
-      date: new Date() // This stores the current date/time
+      date: new Date()
     });
 
     setLoading(false);
