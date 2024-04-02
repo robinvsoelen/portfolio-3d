@@ -21,6 +21,9 @@ const Car = forwardRef(({ lightsOn, LoadManager }, ref) => {
             const guitar = gltf.scene.getObjectByName('guitar');
             if (guitar) guitar.visible = false;
 
+            const surfboard = gltf.scene.getObjectByName('surf');
+            if (surfboard) surfboard.visible = false;
+
             const mixer = new THREE.AnimationMixer(gltf.scene);
             mixerRef.current = mixer;
             setAnimations(gltf.animations);
@@ -28,6 +31,8 @@ const Car = forwardRef(({ lightsOn, LoadManager }, ref) => {
 
             // Play the 'idle' animation after ensuring the mixer and animations are set
             const idleAnimation = gltf.animations.find(a => a.name === 'idle');
+            console.log(gltf.animations)
+
             if (idleAnimation) {
                 const action = mixer.clipAction(idleAnimation);
                 action.play();
@@ -81,10 +86,15 @@ const Car = forwardRef(({ lightsOn, LoadManager }, ref) => {
             const guitar = carModel.getObjectByName('guitar');
             if (guitar) guitar.visible = true;
         },
+        foundSurfboard: () => {
+            const surfboard = carModel.getObjectByName('surf');
+            if (surfboard) surfboard.visible = true;
+        },
         onHonk: () => {
             playAnimation('honk', true);
         }
     }));
+
 
     useFrame((_, delta) => mixerRef.current?.update(delta));
 

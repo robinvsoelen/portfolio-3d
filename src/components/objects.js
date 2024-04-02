@@ -262,7 +262,7 @@ export const objects = [
       path: 'assets/models/blandaband.glb', 
       userData: { 
         text: 'BlandaBand',
-        position: { x: 80, y: 1.5, z: -235 },
+        position: { x: 80, y: 1.5, z: -245 },
         scale: { x: 1, y: 1, z: 1},
         rotation: { x: 0, y:  Math.PI  , z: 0 }, 
         click: {
@@ -270,6 +270,36 @@ export const objects = [
           articleFilename: "blandaband.html",
         },
         isInteractable: true,
+      } 
+    },
+    { 
+      name: 'surfboard', 
+      path: 'assets/models/surf.glb', 
+      userData: { 
+        text: 'A surfboard!',
+        position: { x: -5, y: 0, z: -200 },
+        scale: { x: 1, y: 1, z: 1},
+        rotation: { x: 0, y:  Math.PI  , z: 0 }, 
+        click: {
+          isSurfboard: true,
+        },
+        isInteractable: true,
+      } 
+    },
+    { 
+      name: 'ai', 
+      path: 'assets/models/ai.glb', 
+      userData: { 
+        text: 'AI',
+        position: { x: 40, y: 0, z: -210 },
+        scale: { x: 4, y: 4, z: 4},
+        rotation: { x: 0, y:  - Math.PI / 2 , z: 0 }, 
+        click: {
+          contentBrowser: true,
+          articleFilename: "ai.html",
+        },
+        isInteractable: true,
+        hasAnimation: true
       } 
     },
   ];

@@ -136,7 +136,7 @@ useEffect(() => {
   });
 }
 
-const ClickHandler = ({ selectedObjects, setSelectedObjects, setCurrentTrack, setShowContent, setSelectedContent, setOpenWindows, openWindows, foundRadio, setFoundRadio, carRef, foundGuitar, setFoundGuitar }) => {
+const ClickHandler = ({ selectedObjects, setSelectedObjects, setCurrentTrack, setShowContent, setSelectedContent, setOpenWindows, openWindows, foundRadio, setFoundRadio, carRef, foundGuitar, setFoundGuitar, foundSurfboard, setFoundSurfboard }) => {
   const { gl } = useThree();
 
   useEffect(() => {
@@ -159,6 +159,9 @@ const ClickHandler = ({ selectedObjects, setSelectedObjects, setCurrentTrack, se
         }
         if (selectedObjects[0].userData.click.isGuitar && !foundGuitar) {
           setFoundGuitar(true);
+        }
+        if (selectedObjects[0].userData.click.isSurfboard && !foundSurfboard) {
+          setFoundSurfboard(true);
         }
         if(selectedObjects[0].userData.click.isExternalLink) {
           window.open(selectedObjects[0].userData.click.link, "_blank");
@@ -196,6 +199,7 @@ function MainScene() {
 
   const [foundRadio, setFoundRadio] = useState(false);
   const [foundGuitar, setFoundGuitar] = useState(false);
+  const [foundSurfboard, setFoundSurfboard] = useState(false);
 
 
   return (
@@ -222,7 +226,7 @@ function MainScene() {
 
         <ambientLight intensity={0.3} />
 
-        <ClickHandler selectedObjects={selectedObjects} setCurrentTrack={setCurrentTrack}  setSelectedContent={setSelectedContent} setOpenWindows={setOpenWindows} openWindows={openWindows} foundRadio={foundRadio} setFoundRadio={setFoundRadio} carRef={carRef} foundGuitar={foundGuitar} setFoundGuitar={setFoundGuitar} />
+        <ClickHandler selectedObjects={selectedObjects} setCurrentTrack={setCurrentTrack}  setSelectedContent={setSelectedContent} setOpenWindows={setOpenWindows} openWindows={openWindows} foundRadio={foundRadio} setFoundRadio={setFoundRadio} carRef={carRef} foundGuitar={foundGuitar} setFoundGuitar={setFoundGuitar} foundSurfboard={foundSurfboard} setFoundSurfboard={setFoundSurfboard}/>
 
         <Sky
           turbidity={10}
@@ -251,11 +255,11 @@ function MainScene() {
           shadow-camera-bottom={-100} // Bottom plane of the shadow camera
           shadow-bias={-0.0001} // Reduces shadow acne
         />
-        <ResourceHandler selectedObjects={selectedObjects} setSelectedObjects={setSelectedObjects} setLoaded={setLoaded} setLoadingProgress={setLoadingProgress} foundRadio={foundRadio} foundGuitar={foundGuitar}/>
+        <ResourceHandler selectedObjects={selectedObjects} setSelectedObjects={setSelectedObjects} setLoaded={setLoaded} setLoadingProgress={setLoadingProgress} foundRadio={foundRadio} foundGuitar={foundGuitar} foundSurfboard={foundSurfboard} />
 
       </Canvas>
 
-      {loaded && <Taskbar openWindows={openWindows} setOpenWindows={setOpenWindows} foundRadio={foundRadio} setFoundRadio={setFoundRadio} carRef={carRef} foundGuitar={foundGuitar} />}
+      {loaded && <Taskbar openWindows={openWindows} setOpenWindows={setOpenWindows} foundRadio={foundRadio} setFoundRadio={setFoundRadio} carRef={carRef} foundGuitar={foundGuitar} foundSurfboard={foundSurfboard} />}
 
     </div>
   );

@@ -3,7 +3,7 @@ import './TaskBar.css'; // Assuming you will put your CSS here
 import MainContentBrowser from './MainContentBrowser';
 import Radio from './Radio';
 import { Car } from '../3D/CarModel';
-
+import CreateArtwork from './CreateArtwork';
 const TaskBarWindowIcon = ({ window, toggleWindowVisibility, visibleWindows }) => {
   const isVisible = visibleWindows.get(window.id);
   const iconClasses = `window-icon ${isVisible ? 'pressed' : ''}`;
@@ -58,7 +58,7 @@ const MessageBox = ({ type, title, message, options }) => {
 };
 
 
-const Taskbar = ({ openWindows, setOpenWindows, hoverText, setFoundRadio, foundRadio, carRef, foundGuitar }) => {
+const Taskbar = ({ openWindows, setOpenWindows, hoverText, setFoundRadio, foundRadio, carRef, foundGuitar, foundSurfboard }) => {
 
   const [showContent, setShowContent] = useState(false);
   const [showStart, setShowStart] = useState(false);
@@ -111,6 +111,7 @@ const Taskbar = ({ openWindows, setOpenWindows, hoverText, setFoundRadio, foundR
 
   const [attachedRadio, setAttachedRadio] = useState(false);
   const [attachedGuitar, setAttachedGuitar] = useState(false);
+  const [attachedSurfboard, setAttachedSurfboard] = useState(false);
 
 
   useEffect(() => {
@@ -129,6 +130,11 @@ const Taskbar = ({ openWindows, setOpenWindows, hoverText, setFoundRadio, foundR
   const attachGuitar = () => {
     setAttachedGuitar(true);
     carRef.current.foundGuitar();
+  }
+
+  const attachSurfboard = () => {
+    setAttachedSurfboard(true);
+    carRef.current.foundSurfboard();
   }
 
   return (
@@ -169,6 +175,15 @@ const Taskbar = ({ openWindows, setOpenWindows, hoverText, setFoundRadio, foundR
       />
       }
 
+      {!attachedSurfboard && foundSurfboard && <MessageBox
+        type="info"
+        message="You just found a surfboard!"
+        options={[
+          { label: 'Radical dude!', onClick: attachSurfboard },
+        ]}
+      />
+      } 
+
       <div className="taskbar">
         <StartMenu
           isVisible={showStart}
@@ -201,6 +216,9 @@ const Taskbar = ({ openWindows, setOpenWindows, hoverText, setFoundRadio, foundR
 
         <div id={"tooltip"} ></div>
 
+
+        <CreateArtwork />
+
         {attachedRadio && <Radio />}
         <div className='honk' onClick={() => honk()}>
         <img className='honkImage' src={'assets/img/klaxon.svg'} width={45} height={45} />
@@ -208,6 +226,7 @@ const Taskbar = ({ openWindows, setOpenWindows, hoverText, setFoundRadio, foundR
         <div className="taskbar-time">
           {currentTime.toLocaleTimeString()}
         </div>
+
 
       </div>
     </div>

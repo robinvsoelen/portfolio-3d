@@ -19,8 +19,10 @@ import { AfterimagePass } from 'three/examples/jsm/postprocessing/AfterimagePass
 import {objects} from '../objects'
 
 
-function ResourceHandler({selectedObjects, setSelectedObjects, setLoaded, setLoadingProgress, foundRadio, foundGuitar}) {
+function ResourceHandler({selectedObjects, setSelectedObjects, setLoaded, setLoadingProgress, foundRadio, foundGuitar, foundSurfboard}) {
   const { scene, camera, gl } = useThree();
+  scene.fog = new THREE.FogExp2(0xaaaaaa, 0.001);
+
   const composerRef = useRef();
   const outlinePassRef = useRef();
 
@@ -47,6 +49,10 @@ function ResourceHandler({selectedObjects, setSelectedObjects, setLoaded, setLoa
   useEffect(() => {
     if (foundGuitar) removeObjectByName('Guitarr')
   }, [foundGuitar]);
+
+  useEffect(() => {
+    if (foundSurfboard) removeObjectByName('surfboard')
+  }, [foundSurfboard]);
 
 
   useEffect(() => {
