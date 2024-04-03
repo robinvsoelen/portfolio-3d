@@ -17,7 +17,7 @@ const CreateArtwork = () => {
         const context = canvas.getContext('2d');
 
         // Make canvas responsive
-        const scale = window.innerWidth < 512 ? window.innerWidth / 520 : 1;
+        const scale = window.innerWidth < 512 ? (window.innerWidth - 4) / 512 : 1;
         const width = 512 * scale;
         const height = 512 * scale;
 

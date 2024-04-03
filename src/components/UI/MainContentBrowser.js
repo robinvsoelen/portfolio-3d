@@ -160,7 +160,7 @@ const MainContentBrowser = ({onClose, visibleWindows, toggleWindowVisibility, br
       left: isFullscreen  || isMobile ? '0px' : `${position.x}px`,
       top: isFullscreen  || isMobile ? '0px' : `${position.y}px`,
       width: isFullscreen || isMobile ? '100%' : `${size.width}px`,
-      height: isFullscreen || isMobile ? '100%' : `${size.height}px`,
+      height: isFullscreen || isMobile ? 'calc(100% - 72px)' : `${size.height}px`,
       transform: 'none', // Adjust or remove transform based on fullscreen state
       position: isFullscreen || isMobile ? 'fixed' : 'absolute', // Use fixed positioning for fullscreen to cover the entire screen
       margin: isFullscreen || isMobile  ? '0px' : '20px', // Use fixed positioning for fullscreen to cover the entire screen
