@@ -302,4 +302,36 @@ export const objects = [
         hasAnimation: true
       } 
     },
+    { 
+      name: 'artworkCreator', 
+      path: 'assets/models/artworkCreator.glb', 
+      userData: { 
+        text: 'Create some art!',
+        position: { x: -10, y: 0, z: -410 },
+        scale: { x: 4, y: 4, z: 4},
+        rotation: { x: 0, y:   Math.PI / 4 , z: 0 }, 
+        click: {
+          contentBrowser: true,
+          isArtworkCreator: true,
+        },
+        isInteractable: true,
+        hasAnimation: true
+      } 
+    },
+    { 
+      name: 'artworkShower', 
+      path: 'assets/models/bulletin.glb', 
+      userData: { 
+        text: 'Look at some art!',
+        position: { x: 7, y: 0, z: -410 },
+        scale: { x: 2, y: 2, z: 2},
+        rotation: { x: 0, y:   -Math.PI / 4 , z: 0 }, 
+        click: {
+          contentBrowser: true,
+          isArtworkShower: true,
+        },
+        isInteractable: true,
+        hasAnimation: true
+      } 
+    },
   ];

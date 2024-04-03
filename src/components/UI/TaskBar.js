@@ -3,13 +3,18 @@ import './TaskBar.css'; // Assuming you will put your CSS here
 import MainContentBrowser from './MainContentBrowser';
 import Radio from './Radio';
 import { Car } from '../3D/CarModel';
+
 const TaskBarWindowIcon = ({ window, toggleWindowVisibility, visibleWindows }) => {
   const isVisible = visibleWindows.get(window.id);
   const iconClasses = `window-icon ${isVisible ? 'pressed' : ''}`;
 
   return (
     <div className={iconClasses} onClick={() => toggleWindowVisibility(window.id)}>
-      <img src="assets/img/fancy-window.svg" />
+      {!window.click.isArtworkCreator && !window.click.isArtworkShower && <img src="assets/img/fancy-window.svg" /> }
+      {window.click.isArtworkCreator && <img src="assets/img/paintbrush.svg" /> }
+      {window.click.isArtworkShower && <img src="assets/img/gallery.svg" /> }
+
+
     </div>
   );
 };
@@ -92,6 +97,20 @@ const Taskbar = ({ openWindows, setOpenWindows, hoverText, setFoundRadio, foundR
   }
 
   useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.code === "Space") {
+        honk();
+      }
+    };
+  
+    window.addEventListener('keydown', handleKeyDown);
+  
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+
+  useEffect(() => {
     setVisibleWindows(new Map(openWindows.map(window => [window.id, visibleWindows.get(window.id) ?? true])));
   }, [openWindows]);
 
@@ -142,14 +161,12 @@ const Taskbar = ({ openWindows, setOpenWindows, hoverText, setFoundRadio, foundR
         openWindows.map((window, index) => (
           <MainContentBrowser
             bringToFront={bringToFront}
-            windowId={window.id}
             key={window.id}
-            title={window.text}
             setShowContent={setShowContent}
-            articleFilename={window.click.articleFilename}
             onClose={() => handleCloseWindow(window.id)}
             visibleWindows={visibleWindows}
             toggleWindowVisibility={toggleWindowVisibility}
+            browserWindow={window}
           />
         ))
       ) : (
@@ -222,8 +239,6 @@ const Taskbar = ({ openWindows, setOpenWindows, hoverText, setFoundRadio, foundR
         <div className="taskbar-time">
           {currentTime.toLocaleTimeString()}
         </div>
-
-
       </div>
     </div>
   );

@@ -11,7 +11,7 @@ import Taskbar from '../UI/TaskBar';
 import { v4 as uuidv4 } from 'uuid';
 import { isMobile } from 'react-device-detect';
 import { Howl } from 'howler';
-import CreateArtwork from '../UI/CreateArtwork';
+import LoadingScreen from '../UI/LoadingScreen';
 
 const tracks = [
   {
@@ -150,7 +150,7 @@ const ClickHandler = ({ selectedObjects, setCurrentTrack, setOpenWindows, openWi
           });
         }
         if (selectedObjects[0].userData.click.contentBrowser && ((isMobile && openWindows.length < 1) || (!isMobile && openWindows.length < 4))) {
-          const windowWithId = { ...selectedObjects[0].userData, id: uuidv4() }; // Assign a unique ID
+          const windowWithId = { ...selectedObjects[0].userData, id: uuidv4()  }; // Assign a unique ID
           setOpenWindows([...openWindows, windowWithId]);
         }
         if (selectedObjects[0].userData.click.isRadio && !foundRadio) {
@@ -200,20 +200,13 @@ function MainScene() {
   const [foundGuitar, setFoundGuitar] = useState(false);
   const [foundSurfboard, setFoundSurfboard] = useState(false);
 
+  const [userReady, setUserReady] = useState(false);
+
 
   return (
-    <div style={{ height: "100vh", position: 'relative' }}>
+    <div style={{ height: "100%", position: 'absolute', width: '100%' }}>
 
-      {!loaded && (
-        <div className={`LoadingContainer ${loaded ? 'fadeOut' : ''}`}>
-          <div className='MyName'>
-            Robin van Soelen
-          </div>
-          <div className="lds-dual-ring">
-            <div className='LoadingText'>{loadingProgress.toFixed(0)}%</div>
-          </div>
-        </div>
-      )}
+      { !userReady && <LoadingScreen loaded={loaded} loadingProgress={loadingProgress} setUserReady={setUserReady} userReady={userReady} />}
 
 
       <Canvas shadows
@@ -258,10 +251,8 @@ function MainScene() {
 
       </Canvas>
 
-      {loaded && <Taskbar openWindows={openWindows} setOpenWindows={setOpenWindows} foundRadio={foundRadio} setFoundRadio={setFoundRadio} carRef={carRef} foundGuitar={foundGuitar} foundSurfboard={foundSurfboard} />}
+      {<Taskbar openWindows={openWindows} setOpenWindows={setOpenWindows} foundRadio={foundRadio} setFoundRadio={setFoundRadio} carRef={carRef} foundGuitar={foundGuitar} foundSurfboard={foundSurfboard} />}
 
-
-      <CreateArtwork />
 
     </div>
   );

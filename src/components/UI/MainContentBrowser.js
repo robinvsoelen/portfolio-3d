@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import './MainContentBrowser.css'; // Make sure to create this CSS file
+import CreateArtwork from './artwork/CreateArtwork';
+import { isMobile } from 'react-device-detect';
+import ShowArtwork from './artwork/ShowArtwork'
 
-const MainContentBrowser = ({windowId, title, setShowContent, articleFilename, onClose, visibleWindows, toggleWindowVisibility, bringToFront }) => {
-  const [searchQuery, setSearchQuery] = useState(`${process.env.PUBLIC_URL}/articles/${articleFilename}`);
+const MainContentBrowser = ({onClose, visibleWindows, toggleWindowVisibility, bringToFront, browserWindow }) => {
+  const [searchQuery, setSearchQuery] = useState(`${process.env.PUBLIC_URL}/articles/${browserWindow.click.articleFilename}`);
 
 
   const PageNotFound  = () => "<h1>404 Page Not Found</h1><p>You messed up. Shame on you.</p>"
@@ -40,7 +43,7 @@ const MainContentBrowser = ({windowId, title, setShowContent, articleFilename, o
   const [startResizePosition, setStartResizePosition] = useState({ x: 0, y: 0 });
   const [startSize, setStartSize] = useState({ width: 0, height: 0 });
   const [currentResizeDirection, setCurrentResizeDirection] = useState('');
-  const [size, setSize] = useState({ width: 800, height: 600 }); // Default width and height can be your starting size
+  const [size, setSize] = useState({ width: 1000, height: 800 }); // Default width and height can be your starting size
 
   const [isFullscreen, setIsFullscreen] = useState(false); // Default width and height can be your starting size
 
@@ -126,12 +129,12 @@ const MainContentBrowser = ({windowId, title, setShowContent, articleFilename, o
   };
 
   useEffect(() => {
-    fetch(`${process.env.PUBLIC_URL}/articles/${articleFilename}`)
+    fetch(`${process.env.PUBLIC_URL}/articles/${browserWindow.click.articleFilename}`)
       .then(response => response.text())
       .then(html => {
         setArticleContent(html);
       });
-  }, [articleFilename]);
+  }, [browserWindow.click.articleFilename]);
 
   useEffect(() => {
     const move = (e) => handleMouseMove(e);
@@ -152,29 +155,30 @@ const MainContentBrowser = ({windowId, title, setShowContent, articleFilename, o
   return (
     <div
     className="mainContentBrowser"
-    onMouseDown={() => bringToFront(windowId)} // Apply onMouseDown to the root div
+    onMouseDown={() => bringToFront(browserWindow.id)} // Apply onMouseDown to the root div
     style={{
-      left: isFullscreen ? '0px' : `${position.x}px`,
-      top: isFullscreen ? '0px' : `${position.y}px`,
-      width: isFullscreen ? '100%' : `${size.width}px`,
-      height: isFullscreen ? '100%' : `${size.height}px`,
+      left: isFullscreen  || isMobile ? '0px' : `${position.x}px`,
+      top: isFullscreen  || isMobile ? '0px' : `${position.y}px`,
+      width: isFullscreen || isMobile ? '100%' : `${size.width}px`,
+      height: isFullscreen || isMobile ? '100%' : `${size.height}px`,
       transform: 'none', // Adjust or remove transform based on fullscreen state
-      position: isFullscreen ? 'fixed' : 'absolute', // Use fixed positioning for fullscreen to cover the entire screen
-      margin: isFullscreen ? '0px' : '20px', // Use fixed positioning for fullscreen to cover the entire screen
-      zIndex: visibleWindows.get(windowId)?.zIndex || 1, // Fallback to 1 if not set
-      display: visibleWindows.get(windowId) ? 'flex' : 'none'// Conditionally render based on visibility
+      position: isFullscreen || isMobile ? 'fixed' : 'absolute', // Use fixed positioning for fullscreen to cover the entire screen
+      margin: isFullscreen || isMobile  ? '0px' : '20px', // Use fixed positioning for fullscreen to cover the entire screen
+      zIndex: visibleWindows.get(browserWindow.id)?.zIndex || 1, // Fallback to 1 if not set
+      display: visibleWindows.get(browserWindow.id) ? 'flex' : 'none'// Conditionally render based on visibility
 
     }}
   >      
   <div className="titleBar" onMouseDown={handleMouseDown}>
-        <span className="title">{title}</span>
+        <span className="title">{browserWindow.text}</span>
         <div className="windowControls">
-          <button className="minimize" onClick={() => toggleWindowVisibility(windowId)}>-</button>
-          <button className="maximize" onClick={() => setIsFullscreen(!isFullscreen)}>[]</button>
-          <button className="close" onClick={() => onClose(windowId)}>x</button>
+          <button className="minimize" onClick={() => toggleWindowVisibility(browserWindow.id)}>-</button>
+         {!isMobile && <button className="maximize" onClick={() => setIsFullscreen(!isFullscreen)}>[]</button>}
+          <button className="close" onClick={() => onClose(browserWindow.id)}>x</button>
         </div>
       </div>
-      <div className="searchBar">
+     {!browserWindow.click.isArtworkCreator && !browserWindow.click.isArtworkShower &&  
+     <div className="searchBar">
         <input 
           type="text" 
           placeholder="Search or enter address" 
@@ -182,10 +186,17 @@ const MainContentBrowser = ({windowId, title, setShowContent, articleFilename, o
           onChange={(e) => setSearchQuery(e.target.value)} 
         />
         <button onClick={handleSearch}>Go</button>
-      </div>
+      </div>}
+      {!browserWindow.click.isArtworkCreator && !browserWindow.click.isArtworkShower && 
       <div className="content">
        <div className='article' dangerouslySetInnerHTML={{ __html: articleContent }} />
       </div>
+      }
+      {browserWindow.click.isArtworkCreator && <CreateArtwork/> }
+      
+      {browserWindow.click.isArtworkShower && <ShowArtwork/> }
+
+
       <div className="resizeHandle right" onMouseDown={(e) => handleResizeStart(e, 'right')}></div>
       <div className="resizeHandle bottom" onMouseDown={(e) => handleResizeStart(e, 'bottom')}></div>
     </div>

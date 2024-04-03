@@ -1,0 +1,96 @@
+.MyName {
+    background: rgba(0,0,0,0);
+    z-index: 20;
+    color: rgb(255, 255, 255);
+
+    font-size: 70px;
+}
+
+.LoadingContainer {
+    position:fixed;
+    width: 100%;
+    height: 100%;
+    transition: 2s;
+    z-index: 1000;
+    background-position: center center; /* x-position y-position */
+    background-repeat: no-repeat; /* Prevents the image from repeating */
+    background-size: cover;
+}
+.LoadingContainer.fadeOut {
+    opacity: 0;
+    transition: 1s;
+}
+
+.loadingContent {
+    align-items: center;
+    position:absolute;
+    left: 50%;
+    top: 30%;
+    transform: translate(-50%, -50%);
+    background: rgb(66 36 52 / 40%);
+    padding: 40px;
+    border-radius: 20px;
+}
+
+.userReadyText {
+
+    font-size: 20px;
+    color: white;
+}
+
+.userReadyButton {
+    font-size: 20px;
+    color: #ffffff;
+    background-color: rgba(0,0,0,0);
+    border-radius: 10px;
+    border: 2px #fff;
+    border-style: solid;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.userReadyButton:hover {
+    background-color: rgba(0,0,0,0);
+    border: 2px #dfdfdf;
+    border-style: solid;
+
+}
+
+.LoadingText {
+    position:absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 30px;
+    font-family: "PT Serif", serif;
+    font-weight: 200;
+    font-style: normal;
+    color: #ffffff;
+}
+
+.lds-dual-ring {
+    position:absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.lds-dual-ring:after {
+    content: " ";
+    display: block;
+    width: 256px;
+    height: 256px;
+    margin: 8px;
+    border-radius: 50%;
+    border: 6px solid #ffffff;
+    border-color: #ffffff transparent #ffffff transparent;
+    animation: lds-dual-ring 1.2s linear infinite;
+  }
+  @keyframes lds-dual-ring {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }

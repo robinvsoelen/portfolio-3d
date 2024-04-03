@@ -13,7 +13,7 @@
 }
 
 .titleBar {
-  background-image: linear-gradient(to right, #ff00cc , #00fffb);
+  background-image: linear-gradient(to right, red , blue);
   color: white;
   padding: 5px;
   display: flex;
