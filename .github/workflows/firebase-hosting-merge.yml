@@ -12,11 +12,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: npm ci && npm run build
+        env: 
+          CI: false
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_PORTFOLIO_3D_97EFE }}'
           channelId: live
           projectId: portfolio-3d-97efe
-        env: 
-          CI: false
