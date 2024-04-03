@@ -11,6 +11,7 @@ import Taskbar from '../UI/TaskBar';
 import { v4 as uuidv4 } from 'uuid';
 import { isMobile } from 'react-device-detect';
 import { Howl } from 'howler';
+import CreateArtwork from '../UI/CreateArtwork';
 
 const tracks = [
   {
@@ -49,20 +50,20 @@ function CarPositionUpdater({ carRef, currentTrack, setUseCarLights }) {
   // Use a ref to store the direction the camera is moving (1 for forward, -1 for backward)
   const cameraDirectionRef = useRef(0);
 
-  const isCarInitiallyMoving = useRef(false); // New ref to track initial movement
+  // const isCarInitiallyMoving = useRef(false); // New ref to track initial movement
 
-  const engineSoundsRef = useRef({
-    start: new Howl({ src: '/assets/audio/engine.mp3', volume: 0.5 }),
-    running: new Howl({ src: '/assets/audio/engine running.mp3', loop: true, volume: 0.5 }),
-    stop: new Howl({ src: '/assets/audio/engine stop.mp3', volume: 0.5 }),
-    idle: new Howl({ src: '/assets/audio/engine idle.mp3',loop: true, volume: 0.2 }),
-});
+//   const engineSoundsRef = useRef({
+//     start: new Howl({ src: '/assets/audio/engine.mp3', volume: 0.5 }),
+//     running: new Howl({ src: '/assets/audio/engine running.mp3', loop: true, volume: 0.5 }),
+//     stop: new Howl({ src: '/assets/audio/engine stop.mp3', volume: 0.5 }),
+//     idle: new Howl({ src: '/assets/audio/engine idle.mp3',loop: true, volume: 0.2 }),
+// });
 
-useEffect(() => {
-  return () => {
-      Object.values(engineSoundsRef.current).forEach(sound => sound.stop());
-  };
-}, []);
+// useEffect(() => {
+//   return () => {
+//       Object.values(engineSoundsRef.current).forEach(sound => sound.stop());
+//   };
+// }, []);
 
   useEffect(() => {
     // Set initial rotation based on the track's direction
@@ -258,6 +259,9 @@ function MainScene() {
       </Canvas>
 
       {loaded && <Taskbar openWindows={openWindows} setOpenWindows={setOpenWindows} foundRadio={foundRadio} setFoundRadio={setFoundRadio} carRef={carRef} foundGuitar={foundGuitar} foundSurfboard={foundSurfboard} />}
+
+
+      <CreateArtwork />
 
     </div>
   );

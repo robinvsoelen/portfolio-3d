@@ -3,7 +3,6 @@ import './TaskBar.css'; // Assuming you will put your CSS here
 import MainContentBrowser from './MainContentBrowser';
 import Radio from './Radio';
 import { Car } from '../3D/CarModel';
-import CreateArtwork from './CreateArtwork';
 const TaskBarWindowIcon = ({ window, toggleWindowVisibility, visibleWindows }) => {
   const isVisible = visibleWindows.get(window.id);
   const iconClasses = `window-icon ${isVisible ? 'pressed' : ''}`;
@@ -215,9 +214,6 @@ const Taskbar = ({ openWindows, setOpenWindows, hoverText, setFoundRadio, foundR
         )}
 
         <div id={"tooltip"} ></div>
-
-
-        <CreateArtwork />
 
         {attachedRadio && <Radio />}
         <div className='honk' onClick={() => honk()}>
