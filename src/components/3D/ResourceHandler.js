@@ -180,6 +180,7 @@ function ResourceHandler({selectedObjects, setSelectedObjects, setLoaded, setLoa
     }
   }, [selectedObjects]);
 
+
   useFrame(() => {
     if (composerRef.current) {
       composerRef.current.render();
@@ -191,6 +192,13 @@ function ResourceHandler({selectedObjects, setSelectedObjects, setLoaded, setLoa
     }
 
   }, 1);
+
+
+  function checkIfObjectStillSelected(selectedObject) {
+    if (modelInteractor.current && selectedObject) {
+         return modelInteractor.current.isObjectStillSelected(selectedObject);
+    }
+  }
 
   return null
 }

@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import './LoadingScreen.css'
+import { isMobile, isTablet } from 'react-device-detect';
 
 const LoadingScreen = ({ loaded, loadingProgress, setUserReady, userReady }) => {
     const [triggerFadeOut, setTriggerFadeOut] = useState(false);
@@ -19,13 +20,14 @@ const LoadingScreen = ({ loaded, loadingProgress, setUserReady, userReady }) => 
             <div style={{ backgroundImage: 'url("./assets/img/screenshot.png")' }} className={`LoadingContainer ${triggerFadeOut ? 'fadeOut' : ''}`}>
 
                 {loaded && <div className='loadingContent'>
-                    <div className='MyName'>
+                    {/* <div className='MyName'>
                         Robin van Soelen
-                    </div>
-                    <p className='userReadyText'>Hello and welcome to my website.  </p>
+                    </div> */}
+                    <h1 className='userReadyText'>The website is ready!</h1>
+                    {(isMobile || isTablet) && <p className='userReadyText'>Scroll vertically to move, scroll horizontally to pan the camera</p>}
+                    {(!isMobile & !isTablet) && <p className='userReadyText'>Use the mouse to control everything</p>}
 
-                    <p className='userReadyText'>The website is ready. Are you?</p>
-                    <button className='userReadyButton' onClick={handleUserReady}>I was born ready</button>
+                    <button className='userReadyButton' onClick={handleUserReady}>Start</button>
                 </div>}
 
                 {!loaded && (

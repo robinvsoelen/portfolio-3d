@@ -3,6 +3,7 @@ import './TaskBar.css'; // Assuming you will put your CSS here
 import MainContentBrowser from './MainContentBrowser';
 import Radio from './Radio';
 import { Car } from '../3D/CarModel';
+import { isMobile, isTablet } from 'react-device-detect';
 
 const TaskBarWindowIcon = ({ window, toggleWindowVisibility, visibleWindows }) => {
   const isVisible = visibleWindows.get(window.id);
@@ -10,9 +11,9 @@ const TaskBarWindowIcon = ({ window, toggleWindowVisibility, visibleWindows }) =
 
   return (
     <div className={iconClasses} onClick={() => toggleWindowVisibility(window.id)}>
-      {!window.click.isArtworkCreator && !window.click.isArtworkShower && <img src="assets/img/fancy-window.svg" /> }
-      {window.click.isArtworkCreator && <img src="assets/img/paintbrush.svg" /> }
-      {window.click.isArtworkShower && <img src="assets/img/gallery.svg" /> }
+      {!window.click.isArtworkCreator && !window.click.isArtworkShower && <img src="assets/img/fancy-window.svg" />}
+      {window.click.isArtworkCreator && <img src="assets/img/paintbrush.svg" />}
+      {window.click.isArtworkShower && <img src="assets/img/gallery.svg" />}
 
 
     </div>
@@ -23,11 +24,8 @@ const StartMenu = ({ isVisible, onMenuItemClick }) => {
   if (!isVisible) return null;
 
   const menuItems = [
-    { id: 1, text: 'Programs' },
-    { id: 2, text: 'Documents' },
-    // Add more menu items here
-    { id: 3, text: 'Settings' },
-    { id: 4, text: 'Shut Down' },
+    { id: 1, text: 'Help' },
+    { id: 2, text: 'Shut Down' },
   ];
 
   return (
@@ -92,7 +90,7 @@ const Taskbar = ({ openWindows, setOpenWindows, hoverText, setFoundRadio, foundR
     carRef.current.onHonk();
     const audio = new Audio();
     audio.src = 'assets/audio/car-horn.mp3';
-    audio.volume = 0.8;
+    audio.volume = 1;
     audio.play()
   }
 
@@ -102,9 +100,9 @@ const Taskbar = ({ openWindows, setOpenWindows, hoverText, setFoundRadio, foundR
         honk();
       }
     };
-  
+
     window.addEventListener('keydown', handleKeyDown);
-  
+
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
@@ -155,6 +153,51 @@ const Taskbar = ({ openWindows, setOpenWindows, hoverText, setFoundRadio, foundR
     carRef.current.foundSurfboard();
   }
 
+  const ShowHelp = () => {
+
+  }
+
+  const [shutDownWarning, setShutDownWarning] = useState(false);
+  const [hasShutDown, setHasShutdown] = useState(false);
+  const [helpMessage, setHelpMessage] = useState(false);
+  const [loveLifeMessage, setLoveLifeMessage] = useState(false);
+  const [pastaMessage, setPastaMessage] = useState(false);
+  const [websiteMessage, setWebsiteMessage] = useState(false);
+
+
+  const ShutDown = () => {
+    const audio = new Audio();
+    audio.src = 'assets/audio/shutdown.mp3';
+    audio.volume = 1;
+    audio.play()
+
+    setShutDownWarning(false);
+    setHasShutdown(true);
+
+    setTimeout(() => {
+      var element = document.getElementById('powerbutton');
+      element.style.opacity = 1;
+    }, 1000);
+  }
+
+  const powerOn = () => {
+    const audio = new Audio();
+    audio.src = 'assets/audio/startup.mp3';
+    audio.volume = 1;
+    audio.play()
+
+    var element = document.getElementById('blackout');
+    element.style.opacity = 0;
+    var element = document.getElementById('powerbutton');
+    element.style.display = 'none';
+
+    setTimeout(() => {
+      setHasShutdown(false);
+    }, 1000);
+
+
+  }
+
   return (
     <div>
       {openWindows ? (
@@ -173,6 +216,9 @@ const Taskbar = ({ openWindows, setOpenWindows, hoverText, setFoundRadio, foundR
         <div></div>
       )}
 
+
+      <div id={"tooltip"} ></div>
+
       {!attachedRadio && foundRadio && <MessageBox
         type="info"
         message="You just found a radio!"
@@ -186,7 +232,7 @@ const Taskbar = ({ openWindows, setOpenWindows, hoverText, setFoundRadio, foundR
         type="info"
         message="You just found a guitar!"
         options={[
-          { label: 'Awesome!', onClick: attachGuitar },
+          { label: 'Sweet!', onClick: attachGuitar },
         ]}
       />
       }
@@ -198,13 +244,76 @@ const Taskbar = ({ openWindows, setOpenWindows, hoverText, setFoundRadio, foundR
           { label: 'Radical dude!', onClick: attachSurfboard },
         ]}
       />
-      } 
+      }
+
+      {helpMessage && <MessageBox
+        type="info"
+        message="What can I help you with?"
+        options={[
+          { label: 'My relationship', onClick: () => { setLoveLifeMessage(true); setHelpMessage(false) }}, // Corrected syntax
+          { label: 'Cooking pasta', onClick: () => { setPastaMessage(true); setHelpMessage(false) }}, // Corrected syntax
+          { label: 'This website', onClick: () => {setWebsiteMessage(true) ; setHelpMessage(false)}}, // Corrected syntax
+        ]}
+      />
+      }
+
+      {loveLifeMessage && <MessageBox
+        type="info"
+        message="Love yourself first, surprise each other every once in a while and make sure to communicate"
+        options={[
+          { label: 'Aight, thanks!', onClick: () => setLoveLifeMessage(false) }, // Corrected syntax
+        ]}
+      />
+      }
+
+      {pastaMessage && <MessageBox
+        type="info"
+        message="Boil water. When it boils add the pasta. Cook it for about 10 minutes. Add salt for flavor"
+        options={[
+          { label: 'Brilliant!', onClick: () => setPastaMessage(false) }, // Corrected syntax
+        ]}
+      />
+      }
+
+      {(isMobile || isTablet) && websiteMessage && <MessageBox
+        type="info"
+        message="Scroll vertically to move. Scroll horizontally to pan the camera. Double tap on the items you want to interact with"
+        options={[
+          { label: 'Thank you so so much!', onClick: () => setWebsiteMessage(false) }, // Corrected syntax
+        ]}
+      />
+      }
+
+      {(!isMobile && !isTablet) && websiteMessage && <MessageBox
+        type="info"
+        message="Use the mousewheel to move. Use the left mouse button to click on stuff."
+        options={[
+          { label: 'Thank you so so much!', onClick: () => setWebsiteMessage(false) }, // Corrected syntax
+        ]}
+      />
+      }
+
+      {shutDownWarning && <MessageBox
+        type="info"
+        message="Are you sure you want to shut down? It seems like a bad idea..."
+        options={[
+          { label: 'Nevermind', onClick: () => setShutDownWarning(false) }, // Corrected syntax
+          { label: 'I have no fear!', onClick: () => ShutDown() } // Corrected syntax
+        ]}
+      />
+      }
+
+      {hasShutDown && <div id='blackout' className="blackout">
+        <img src='assets/img/powerbutton.svg' id='powerbutton' onClick={() => powerOn()}></img>
+      </div>}
+
 
       <div className="taskbar">
         <StartMenu
           isVisible={showStart}
           onMenuItemClick={(itemId) => {
-            console.log('Menu item clicked:', itemId);
+            if (itemId == 1) setHelpMessage(true);
+            if (itemId == 2) setShutDownWarning(true);
             setShowStart(false);
           }}
         />
@@ -230,11 +339,10 @@ const Taskbar = ({ openWindows, setOpenWindows, hoverText, setFoundRadio, foundR
           <div></div>
         )}
 
-        <div id={"tooltip"} ></div>
 
         {attachedRadio && <Radio />}
         <div className='honk' onClick={() => honk()}>
-        <img className='honkImage' src={'assets/img/klaxon.svg'} width={45} height={45} />
+          <img className='honkImage' src={'assets/img/klaxon.svg'} width={45} height={45} />
         </div>
         <div className="taskbar-time">
           {currentTime.toLocaleTimeString()}

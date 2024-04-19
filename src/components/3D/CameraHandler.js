@@ -99,7 +99,7 @@ export default function CameraController({ currentTrack, setCurrentTrack, direct
 
         touchStart.current = { x: clientX, y: clientY };
 
-        speed -= (deltaY * 0.05); // Update speed based on the wheel movement
+        speed -= (deltaY * 0.03); // Update speed based on the wheel movement
         if (!frameId) {
           frameId = requestAnimationFrame(updatePosition);
         }
@@ -182,7 +182,7 @@ export default function CameraController({ currentTrack, setCurrentTrack, direct
     const maxRotationY = Math.PI / 10;
 
     if (isMobile || isTablet) {
-      desiredRotationY = camera.rotation.y + (rotationY.current * 0.01) + Math.PI;
+      desiredRotationY = camera.rotation.y + (rotationY.current * 0.02) + Math.PI;
       desiredRotationY = Math.max(Math.min(desiredRotationY, maxRotationY + Math.PI + currentTrack.rotation), -maxRotationY + Math.PI  + currentTrack.rotation)
       rotationY.current *= 0.9; // Apply some friction to rotation for a smoother experience
     } else {

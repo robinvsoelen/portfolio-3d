@@ -52,25 +52,25 @@ function CarPositionUpdater({ carRef, currentTrack, setUseCarLights }) {
 
   // const isCarInitiallyMoving = useRef(false); // New ref to track initial movement
 
-//   const engineSoundsRef = useRef({
-//     start: new Howl({ src: '/assets/audio/engine.mp3', volume: 0.5 }),
-//     running: new Howl({ src: '/assets/audio/engine running.mp3', loop: true, volume: 0.5 }),
-//     stop: new Howl({ src: '/assets/audio/engine stop.mp3', volume: 0.5 }),
-//     idle: new Howl({ src: '/assets/audio/engine idle.mp3',loop: true, volume: 0.2 }),
-// });
+  //   const engineSoundsRef = useRef({
+  //     start: new Howl({ src: '/assets/audio/engine.mp3', volume: 0.5 }),
+  //     running: new Howl({ src: '/assets/audio/engine running.mp3', loop: true, volume: 0.5 }),
+  //     stop: new Howl({ src: '/assets/audio/engine stop.mp3', volume: 0.5 }),
+  //     idle: new Howl({ src: '/assets/audio/engine idle.mp3',loop: true, volume: 0.2 }),
+  // });
 
-// useEffect(() => {
-//   return () => {
-//       Object.values(engineSoundsRef.current).forEach(sound => sound.stop());
-//   };
-// }, []);
+  // useEffect(() => {
+  //   return () => {
+  //       Object.values(engineSoundsRef.current).forEach(sound => sound.stop());
+  //   };
+  // }, []);
 
   useEffect(() => {
     // Set initial rotation based on the track's direction
     if (currentTrack.name !== "main") {
       carRef.current.rotation.y = currentTrack.rotation + Math.PI + Math.PI / 2;
     } else {
-      carRef.current.rotation.y = - Math.PI / 2;
+      carRef.current.rotation.y =  Math.PI / 2;
     }
   }, [currentTrack]);
 
@@ -81,7 +81,7 @@ function CarPositionUpdater({ carRef, currentTrack, setUseCarLights }) {
   //   engineSoundsRef.current.start.play();
   //   startSoundStartTimeRef.current = Date.now(); // Record the time the sound started
   // }
-  
+
 
   useFrame(({ camera }) => {
     if (carRef.current) {
@@ -91,7 +91,7 @@ function CarPositionUpdater({ carRef, currentTrack, setUseCarLights }) {
       carRef.current.position.x = camera.position.x - offsetX;
 
       // const displacement = prevCameraZRef.current !== null ? Math.abs(camera.position.z - prevCameraZRef.current) : 0;
- 
+
       // // When you want to check if the sound has played for at least a second
       // const currentTime = Date.now();
       // if (displacement > 2 && engineSoundsRef.current.start.playing()) {
@@ -118,7 +118,7 @@ function CarPositionUpdater({ carRef, currentTrack, setUseCarLights }) {
           } else {
             // Backward movement
             // Rotate to inverse direction (180 degrees from the track's direction)
-            carRef.current.rotation.y = currentTrack.rotation + Math.PI *1.5;
+            carRef.current.rotation.y = currentTrack.rotation + Math.PI * 1.5;
           }
 
           // Update the camera direction ref to the new direction
@@ -149,9 +149,18 @@ const ClickHandler = ({ selectedObjects, setCurrentTrack, setOpenWindows, openWi
             return foundTrack;
           });
         }
-        if (selectedObjects[0].userData.click.contentBrowser && ((isMobile && openWindows.length < 1) || (!isMobile && openWindows.length < 4))) {
-          const windowWithId = { ...selectedObjects[0].userData, id: uuidv4()  }; // Assign a unique ID
-          setOpenWindows([...openWindows, windowWithId]);
+        if (selectedObjects[0].userData.click.contentBrowser) {
+          const threshold = isMobile ? 0 : 3;
+          let newOpenWindows = [...openWindows];
+        
+          if (newOpenWindows.length > threshold) {
+            newOpenWindows = newOpenWindows.slice(1);
+          }
+        
+          const windowWithId = { ...selectedObjects[0].userData, id: uuidv4() };
+          newOpenWindows.push(windowWithId);
+
+          setOpenWindows(newOpenWindows);
         }
         if (selectedObjects[0].userData.click.isRadio && !foundRadio) {
           setFoundRadio(true);
@@ -163,11 +172,18 @@ const ClickHandler = ({ selectedObjects, setCurrentTrack, setOpenWindows, openWi
         if (selectedObjects[0].userData.click.isSurfboard && !foundSurfboard) {
           setFoundSurfboard(true);
         }
-        if(selectedObjects[0].userData.click.isExternalLink) {
+        if (selectedObjects[0].userData.click.isExternalLink) {
           window.open(selectedObjects[0].userData.click.link, "_blank");
+        }
+
+
+        const tooltip = document.getElementById('tooltip');
+        if (tooltip) {
+          tooltip.style.display = 'none';
         }
       }
     };
+
 
     const canvas = gl.domElement;
     canvas.addEventListener('click', handleMouseClick);
@@ -206,7 +222,7 @@ function MainScene() {
   return (
     <div style={{ height: "100%", position: 'absolute', width: '100%' }}>
 
-      { !userReady && <LoadingScreen loaded={loaded} loadingProgress={loadingProgress} setUserReady={setUserReady} userReady={userReady} />}
+      {!userReady && <LoadingScreen loaded={loaded} loadingProgress={loadingProgress} setUserReady={setUserReady} userReady={userReady} />}
 
 
       <Canvas shadows
@@ -218,7 +234,7 @@ function MainScene() {
 
         <ambientLight intensity={0.3} />
 
-        <ClickHandler selectedObjects={selectedObjects} setCurrentTrack={setCurrentTrack} setOpenWindows={setOpenWindows} openWindows={openWindows} foundRadio={foundRadio} setFoundRadio={setFoundRadio} carRef={carRef} foundGuitar={foundGuitar} setFoundGuitar={setFoundGuitar} foundSurfboard={foundSurfboard} setFoundSurfboard={setFoundSurfboard}/>
+        <ClickHandler selectedObjects={selectedObjects} setCurrentTrack={setCurrentTrack} setOpenWindows={setOpenWindows} openWindows={openWindows} foundRadio={foundRadio} setFoundRadio={setFoundRadio} carRef={carRef} foundGuitar={foundGuitar} setFoundGuitar={setFoundGuitar} foundSurfboard={foundSurfboard} setFoundSurfboard={setFoundSurfboard} />
 
         <Sky
           turbidity={10}

@@ -43,15 +43,15 @@ const MainContentBrowser = ({onClose, visibleWindows, toggleWindowVisibility, br
   const [startResizePosition, setStartResizePosition] = useState({ x: 0, y: 0 });
   const [startSize, setStartSize] = useState({ width: 0, height: 0 });
   const [currentResizeDirection, setCurrentResizeDirection] = useState('');
-  const [size, setSize] = useState({ width: 1000, height: 800 }); // Default width and height can be your starting size
+  const [size, setSize] = useState({ width: window.innerWidth * 0.4, height: window.innerHeight * 0.6 }); // Default width and height can be your starting size
 
   const [isFullscreen, setIsFullscreen] = useState(false); // Default width and height can be your starting size
 
   useEffect(() => {
     // Calculate center position
     const calculateCenterPosition = () => {
-      const x = (window.innerWidth - document.querySelector('.mainContentBrowser').offsetWidth) / 4 + (Math.random() * 200);
-      const y = (window.innerHeight - document.querySelector('.mainContentBrowser').offsetHeight) / 8 + + (Math.random() * 200);
+      const x = (window.innerWidth - document.querySelector('.mainContentBrowser').offsetWidth) / 4 - (Math.random() * 100);
+      const y = (window.innerHeight - document.querySelector('.mainContentBrowser').offsetHeight) / 8 - (Math.random() * 100);
       setPosition({ x, y });
       setStartPosition({ x, y });
     };

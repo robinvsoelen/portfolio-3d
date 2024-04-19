@@ -35,7 +35,6 @@
   }
   
   .artworkContainer button {
-    padding: 8px 16px; /* Adds some padding inside the buttons */
     font-size: 16px; /* Increases the font size for better readability */
     cursor: pointer; /* Changes the cursor to a pointer to indicate a clickable button */
     border: none; /* Removes the default button border */
@@ -79,8 +78,8 @@
   }
   
   /* Highlights the active button */
-  .active {
-    border-color: #666; /* Sets a gray border for the active button */
+  .artworkContainer button.active {
+    background: #bfbfbf; /* Sets a gray border for the active button */
   }
 
   .uploadArtworkContainer {

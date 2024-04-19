@@ -39,12 +39,11 @@ const CreateArtwork = () => {
         canvas.addEventListener('touchstart', preventTouchScroll, { passive: false });
         canvas.addEventListener('touchmove', preventTouchScroll, { passive: false });
     
-        // Cleanup function to remove the event listeners
         return () => {
             canvas.removeEventListener('touchstart', preventTouchScroll);
             canvas.removeEventListener('touchmove', preventTouchScroll);
         };
-    }, []); // Dependencies to reinitialize canvas on changes
+    }, []); 
 
     // Update the context properties when color or lineWidth changes
     useEffect(() => {
@@ -109,6 +108,9 @@ const CreateArtwork = () => {
 
                     <div className='controls'>
                         {/* Color buttons */}
+                        <button className={`colorButton ${color === 'black' ? 'active' : ''}`} onClick={() => changeColor('black')}>
+                            <div className="colorIndicator" style={{ backgroundColor: 'black' }}></div>
+                        </button>
                         <button className={`colorButton ${color === 'red' ? 'active' : ''}`} onClick={() => changeColor('red')}>
                             <div className="colorIndicator" style={{ backgroundColor: 'red' }}></div>
                         </button>
@@ -118,7 +120,11 @@ const CreateArtwork = () => {
                         <button className={`colorButton ${color === 'blue' ? 'active' : ''}`} onClick={() => changeColor('blue')}>
                             <div className="colorIndicator" style={{ backgroundColor: 'blue' }}></div>
                         </button>
-
+                        <button className={`colorButton ${color === 'white' ? 'active' : ''}`} onClick={() => changeColor('white')}>
+                            <img src='assets/img/erase.svg' className="colorIndicator" ></img>
+                        </button>
+                        </div>
+                        <div className='controls'>
                         {/* Size buttons - Use the sizeIndicator class with dynamic styles for different sizes */}
                         <button className={`sizeButton ${lineWidth === 2 ? 'active' : ''}`} onClick={() => changePencilSize(2)}>
                             <div className="sizeIndicator" style={{ width: '10px', height: '10px' }}></div> {/* Smaller circle for thin */}

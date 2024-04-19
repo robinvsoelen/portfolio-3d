@@ -79,24 +79,17 @@
 #tooltip {
   position: absolute;
   padding: 10px;
-  padding-left: 20px;
-  padding-right: 20px;
-  background-color: #C0C0C0;
+  padding-left: 10px;
+  padding-right: 10px;
+  background-color: rgba(255,255,255,0.6);
   color: #000000;
   border-radius: 5px;
   pointer-events: none;
   z-index: 100;
   display: none;
-  font-size: 30px;
+  font-size: 14px;
   left: 50%;
   transform: translateX(-50%);
-  border-left: 2px solid #808080;
-  /* Dark left border */
-  border-top: 2px solid #808080;
-  /* Dark top border */
-  border-right: 2px solid #ffffff;
-  /* Light right border */
-  border-bottom: 2px solid #ffffff;
 }
 
 .taskbar-time {
@@ -128,7 +121,7 @@
   transform: translateX(-50%);
 }
 .message-title-bar {
-  background-image: linear-gradient(to right, #ff00cc , #00fffb);
+  background-image: linear-gradient(to right, #ff0000 , #0022ff);
   color: white;
   padding: 5px;
   display: flex;
@@ -140,13 +133,14 @@
   display: flex;
   align-items: center;
   margin-bottom: 10px; /* Space between message and buttons */
-  padding: 10px;
+  padding: 20px;
 
 }
 
 .message-buttons {
   display: flex;
   justify-content: flex-end;
+  margin: 5px;
 }
 
 .message-button {
@@ -194,4 +188,40 @@
 
 .honkImage {
   margin-top: 10px;
+}
+
+.blackout {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgb(0, 0, 0); /* Represents the 'blackness' */
+  animation: tvShutDown 0.2s backwards; /* Adjust duration as needed */
+  z-index: 10000;
+  transition: 1s;
+}
+
+#powerbutton {
+  opacity: 0;
+  transition: 2s;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  cursor: pointer;
+}
+
+@keyframes tvShutDown {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+    clip-path: inset(0);
+    background: #000;
+  }
+  100% {
+    transform: scale(0.95); /* Slightly shrink for a final dramatic effect */
+    clip-path: inset(50% 0); /* Fully closed */
+    opacity: 0; /* Fully faded out */
+  }
 }
