@@ -5,7 +5,6 @@ import { Car } from '../3D/CarModel';
 import CameraController from '../3D/CameraHandler'; 
 import ResourceHandler from '../3D/ResourceHandler';
 import * as THREE from 'three';
-import '../styles.css'
 import Taskbar from '../UI/TaskBar';
 import { v4 as uuidv4 } from 'uuid';
 import { isMobile } from 'react-device-detect';

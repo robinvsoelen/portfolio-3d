@@ -18,9 +18,9 @@ const LoadingScreen = ({ loaded, loadingProgress, setUserReady, userReady }) => 
             <div style={{ backgroundImage: 'url("./assets/img/screenshot.png")' }} className={`LoadingContainer ${triggerFadeOut ? 'fadeOut' : ''}`}>
 
                 {loaded && <div className='loadingContent'>
-                    <h1 className='userReadyText'>The website is ready!</h1>
+                    <h1 className='userReadyHeader'>Welcome!</h1>
                     {(isMobile || isTablet) && <p className='userReadyText'>Scroll vertically to move, scroll horizontally to pan the camera</p>}
-                    {(!isMobile & !isTablet) && <p className='userReadyText'>Use the mouse to control everything</p>}
+                    {(!isMobile & !isTablet) && <p className='userReadyText'>Use the mousewheel to move around</p>}
 
                     <button className='userReadyButton' onClick={handleUserReady}>Start</button>
                 </div>}
