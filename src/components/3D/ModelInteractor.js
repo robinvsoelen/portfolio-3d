@@ -71,15 +71,13 @@ export class ModelInteractor {
     }
     if (this.selectedObjects.length > 0 && !foundIntersection) {
       this.selectedObjects = [];
-      this.onSelectedObjectsChange(this.selectedObjects); // Clear selected objects
-      this.hideTooltip(); // Hide the tooltip if no objects are selected
+      this.onSelectedObjectsChange(this.selectedObjects); 
+      this.hideTooltip(); 
       this.domElement.style.cursor = 'default';
-
     }
   }
 
   isObjectStillSelected(object) {
-    // Check if the given object is in the selectedObjects array
     return this.selectedObjects.includes(object);
 }
 
@@ -88,8 +86,8 @@ export class ModelInteractor {
     if (tooltip) {
       tooltip.style.display = 'block';
       tooltip.innerText = text;
-      tooltip.style.left = position.x + 'px'; // Set the left position
-      tooltip.style.top = position.y + 'px'; // Set the top position
+      tooltip.style.left = position.x + 'px'; 
+      tooltip.style.top = position.y + 'px';
     }
   }
 

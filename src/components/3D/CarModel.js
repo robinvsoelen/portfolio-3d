@@ -31,7 +31,6 @@ const Car = forwardRef(({ lightsOn, LoadManager }, ref) => {
 
             // Play the 'idle' animation after ensuring the mixer and animations are set
             const idleAnimation = gltf.animations.find(a => a.name === 'idle');
-            console.log(gltf.animations)
 
             if (idleAnimation) {
                 const action = mixer.clipAction(idleAnimation);

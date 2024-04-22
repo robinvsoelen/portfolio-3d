@@ -174,15 +174,12 @@ function MainScene() {
 
       <Canvas shadows
         gammafactor={2.2}
-        antialias
+        antialias="true"
         onCreated={({ gl }) => {
           gl.toneMapping = THREE.ACESFilmicToneMapping;
         }}>
-
         <ambientLight intensity={0.3} />
-
         <ClickHandler selectedObjects={selectedObjects} setCurrentTrack={setCurrentTrack} setOpenWindows={setOpenWindows} openWindows={openWindows} foundRadio={foundRadio} setFoundRadio={setFoundRadio} carRef={carRef} foundGuitar={foundGuitar} setFoundGuitar={setFoundGuitar} foundSurfboard={foundSurfboard} setFoundSurfboard={setFoundSurfboard} />
-
         <Sky
           turbidity={10}
           rayleigh={3}
@@ -191,8 +188,8 @@ function MainScene() {
           elevation={0}
           azimuth={180}
         />
-        <Car ref={carRef} lightsOn={useCarLights} /> {/*          <Stars /> Include the Car component in your scene */}
-        <CameraController tracks={tracks} spotlightRef={spotlightRef} currentTrack={currentTrack} setCurrentTrack={setCurrentTrack} directionalLightRef={directionalLightRef} /> {/* Include the camera controller in your scene */}
+        <Car ref={carRef} lightsOn={useCarLights} />
+        <CameraController tracks={tracks} spotlightRef={spotlightRef} currentTrack={currentTrack} setCurrentTrack={setCurrentTrack} directionalLightRef={directionalLightRef} />
         <CarPositionUpdater carRef={carRef} currentTrack={currentTrack} setCurrentTrack={setCurrentTrack} setUseCarLights={setUseCarLights} />
         <directionalLight
           ref={directionalLightRef}
@@ -211,7 +208,6 @@ function MainScene() {
           shadow-bias={-0.0001} // Reduces shadow acne
         />
         <ResourceHandler selectedObjects={selectedObjects} setSelectedObjects={setSelectedObjects} setLoaded={setLoaded} setLoadingProgress={setLoadingProgress} foundRadio={foundRadio} foundGuitar={foundGuitar} foundSurfboard={foundSurfboard} />
-
       </Canvas>
 
       {userReady && <Taskbar openWindows={openWindows} setOpenWindows={setOpenWindows} foundRadio={foundRadio} setFoundRadio={setFoundRadio} carRef={carRef} foundGuitar={foundGuitar} foundSurfboard={foundSurfboard} />}

@@ -16,16 +16,13 @@ export class ResourcePlacer {
         const { position, scale, rotation, text, click } = resource.userData;
 
         model.scene.name = resource.name;
-        // Apply position
+
         model.scene.position.set(position.x, position.y, position.z);
 
-        // Apply scale
         model.scene.scale.set(scale.x, scale.y, scale.z);
 
-        // Apply rotation
         model.scene.rotation.set(rotation.x, rotation.y, rotation.z);
 
-        // Store custom data, like text for hover, in userData
         model.scene.userData.text = text;
 
         model.scene.userData.click = click;

@@ -34,10 +34,8 @@ function ResourceHandler({selectedObjects, setSelectedObjects, setLoaded, setLoa
 
   const removeObjectByName = (name) => {
     const selectedObject = scene.getObjectByName(name);
-    console.log(name)
 
     if (selectedObject) {
-      console.log("delete")
       scene.remove(selectedObject);
     }
   };

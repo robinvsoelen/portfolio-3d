@@ -83,7 +83,6 @@ const Taskbar = ({ openWindows, setOpenWindows, hoverText, setFoundRadio, foundR
       newVisibleWindows.set(windowId, !newVisibleWindows.get(windowId));
       return newVisibleWindows;
     });
-    console.log(visibleWindows)
   };
 
   const honk = () => {

@@ -16,8 +16,7 @@ const UploadArtwork = ({canvasRef}) => {
     const resetCanvas = () => {
         const canvas = canvasRef.current;
         const context = canvas.getContext('2d');
-        context.clearRect(0, 0, canvas.width, canvas.height); // Clears the canvas
-        // Optionally reset to a white background or other initial state
+        context.clearRect(0, 0, canvas.width, canvas.height); 
         context.fillStyle = 'white';
         context.fillRect(0, 0, canvas.width, canvas.height);
     };
@@ -46,7 +45,6 @@ const UploadArtwork = ({canvasRef}) => {
 
         if (!canvasRef.current) 
         {
-            console.log("no canvasref")
             return;
         }
 
@@ -64,21 +62,17 @@ const UploadArtwork = ({canvasRef}) => {
             .then((blob) => {
                 const fileName = `drawing_${new Date().toISOString()}.png`;
         
-                // Get a reference to the location where you want to upload the drawing in Firebase Storage
                 const storage = getStorage();
                 const storageRef = ref(storage, `drawings/${fileName}`);
         
-                // Upload the drawing
                 return uploadBytes(storageRef, blob);
             })
             .then((snapshot) => {
-                console.log(snapshot)
-                return getDownloadURL(snapshot.ref); // Return the promise to chain it
+                return getDownloadURL(snapshot.ref); 
             })
             .then((url) => {
-                console.log(url)
                 const db = getFirestore();
-                return addDoc(collection(db, "artworks"), { // Return the promise to chain it
+                return addDoc(collection(db, "artworks"), { 
                     imageUrl: url,
                     artist: artist,
                     title: title,
@@ -88,7 +82,7 @@ const UploadArtwork = ({canvasRef}) => {
                 });
             })
             .then(() => {
-                resetCanvas(); // Reset the canvas here
+                resetCanvas(); 
                 setArtist('');
                 setHasUploaded(true);
             })
