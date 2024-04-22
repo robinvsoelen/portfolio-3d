@@ -1,16 +1,8 @@
 import React from 'react';
-import './App.css'; // Your main application styles
-
-
-// Import components
-//import Header from './components/common/Header';
-//import Footer from './components/common/Footer';
-// Example of importing a 3D scene component
+import './App.css'; 
 import MainScene from './components/scenes/MainScene';
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 
@@ -32,7 +24,6 @@ function App() {
   
   return (
     <div className="App" >
-      {/* Your routing and main content would typically go here. For simplicity, we're just rendering the HomeScene */}
       <main>
         <MainScene />
       </main>

@@ -1,4 +1,4 @@
-import './TitleBar.css'; // Assuming you will put your CSS here
+import './TitleBar.css'; 
 import React, { useState, useEffect, useRef } from 'react';
 
 const TitleBar = ({ }) => {

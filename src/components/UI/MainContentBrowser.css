@@ -43,7 +43,6 @@
 }
 
 
-/* Additional styling to complete the Windows 98 look */
 .mainContentBrowser {
   font-family: 'MS Sans Serif', Geneva, sans-serif;
   color: #000000;
@@ -51,6 +50,7 @@
   scrollbar-width: auto;
   scrollbar-color: #808080 #C0C0C0;
 }
+
 
 
 .windowControls {
@@ -73,12 +73,26 @@
 }
 
 .content {
-  display: flex; /* Use Flexbox */
-  justify-content: center; /* Center horizontally */
+  display: flex;
+  justify-content: center;
   background-color: #fff;
   flex-grow: 1;
   padding: 20px;
-  overflow-y: auto; /* Ensure scrollbar appears when content overflows */
+  overflow-y: auto; 
+}
+
+.content p {
+  font-size: 18px;
+}
+
+.content iframe {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.content img {
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .article {

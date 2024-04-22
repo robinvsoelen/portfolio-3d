@@ -1,0 +1,16 @@
+<div id="ai">
+    <h1>AI</h1>
+    <p>Ever since the release of GPT-2 and VQGAN+CLIP, I have been fascinated by the (future) capabilities of generative AI. I have done a handful of experiments with generative AI technologies. You can find some on this page.</p> 
+
+    <h2>GPT-Powered Content Generation</h2>
+    <p>I have been fascinated with the idea of being able to create and share content with the push of a button. I have experimented with this through the automation of creating and sharing blog posts and short form videos.  </p>
+
+    <h3>Blog Posts</h3>
+    <p>For the blog posts, I tapped into OpenAI's API to generate content, complete with tags, summaries, and visuals fetched from the Pexels API. Everything was neatly uploaded using WordPress. I created a python script that was running on a server, which would automatically create and upload a new blog post every 10 hours based on a predetermined blog post titles I had stored in a google sheet. I chose music as the theme because it's a bit more forgiving if there's the occasional slip-up in accuracy. </p>
+    <p>I've since moved on from this project, though. It was a fascinating experiment, but ultimately, I felt that trying to monetize AI-generated content like this wasn't the right approach for me. You can still check out what was produced at <a href="www.sonicselfstarter" style="text-decoration: underline;">Sonic Self-Starter</a>.</p>
+
+    <h3>Short Form Content</h3>
+    <p>On platforms like TikTok and Instagram, there's a real push for creators to consistently deliver the same type of content—something that seems more suited to machines than humans. So, I experimented with an automated system that creates short-form videos, combining AI-generated voice-overs with visuals.</p>
+    <p>The process starts with creating a base voice via <a href="https://huggingface.co/spaces/coqui/xtts" style="text-decoration: underline;">xTTS</a>, which is then tweaked to mimic specific characters using <a href="https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI" style="text-decoration: underline;">Retrieval-based Voice Conversion (RVC)</a>. I also sped up the dialogue and cut out lengthy pauses. The visuals were generated through Stable Diffusion Turbo and Stable Video Diffusion, automating the entire process to the point where producing a new video was just a button click away.</p>
+    <p>In the end, though, I found I enjoyed building the technology more than sharing the output. The videos didn’t really add much in terms of value, and spending time on TikTok just isn't my cup of tea.</p>
+</div>

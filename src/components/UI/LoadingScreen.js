@@ -6,10 +6,8 @@ const LoadingScreen = ({ loaded, loadingProgress, setUserReady, userReady }) => 
     const [triggerFadeOut, setTriggerFadeOut] = useState(false);
 
     const handleUserReady = () => {
-        // Trigger the fade out effect
         setTriggerFadeOut(true);
 
-        // After 2 seconds, set userReady to true
         setTimeout(() => {
             setUserReady(true);
         }, 1000);
@@ -20,9 +18,6 @@ const LoadingScreen = ({ loaded, loadingProgress, setUserReady, userReady }) => 
             <div style={{ backgroundImage: 'url("./assets/img/screenshot.png")' }} className={`LoadingContainer ${triggerFadeOut ? 'fadeOut' : ''}`}>
 
                 {loaded && <div className='loadingContent'>
-                    {/* <div className='MyName'>
-                        Robin van Soelen
-                    </div> */}
                     <h1 className='userReadyText'>The website is ready!</h1>
                     {(isMobile || isTablet) && <p className='userReadyText'>Scroll vertically to move, scroll horizontally to pan the camera</p>}
                     {(!isMobile & !isTablet) && <p className='userReadyText'>Use the mouse to control everything</p>}

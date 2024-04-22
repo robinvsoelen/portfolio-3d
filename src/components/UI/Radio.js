@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import './Radio.css'; // Path to your Radio CSS
+import './Radio.css'; 
 
 const stations = [
     { frequency: 88.1, name: "robovs classics", streamUrl: "assets/audio/robovs classics.mp3" },
     { frequency: 92.5, name: "robovs unreleased", streamUrl: "assets/audio/robovs unreleased.mp3" },
     { frequency: 95.8, name: "acoustic guitar noodling FM", streamUrl: "assets/audio/jazz.mp3" },
-    // Add more stations as needed, with their corresponding MP3 URLs
   ];
 
 const Radio = () => {
@@ -34,7 +33,6 @@ const Radio = () => {
     
     setHasLoaded(true);
 
-    // Don't forget to clean up to avoid multiple event listeners being attached
     return () => {
         audio.removeEventListener('loadedmetadata', playRandomPosition);
     };

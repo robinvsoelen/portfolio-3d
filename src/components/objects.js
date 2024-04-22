@@ -115,7 +115,7 @@ export const objects = [
         rotation: { x: - Math.PI / 2, y:  Math.PI - Math.PI / 8 , z: 0 }, 
         click: {
           contentBrowser: true,
-          articleFilename: "accenture.html",
+          articleFilename: "soundlab.html",
         },
         isInteractable: true,
       } 

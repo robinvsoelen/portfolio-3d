@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import './TaskBar.css'; // Assuming you will put your CSS here
+import './TaskBar.css'; 
 import MainContentBrowser from './MainContentBrowser';
 import Radio from './Radio';
 import { Car } from '../3D/CarModel';
@@ -115,8 +115,6 @@ const Taskbar = ({ openWindows, setOpenWindows, hoverText, setFoundRadio, foundR
   const bringToFront = (windowId) => {
     setVisibleWindows(prevVisibleWindows => {
       const updated = new Map(prevVisibleWindows);
-      // Assuming you want to use the same map to store visibility and z-index, you could store an object instead
-      // If the value is currently just a boolean, you'll need to adjust how you handle visibility as well
       updated.set(windowId, { ...updated.get(windowId), zIndex: highestZIndex + 1 });
       return updated;
     });
@@ -135,7 +133,7 @@ const Taskbar = ({ openWindows, setOpenWindows, hoverText, setFoundRadio, foundR
       setCurrentTime(new Date());
     }, 1000);
 
-    return () => clearInterval(timer); // Cleanup the interval on component unmount
+    return () => clearInterval(timer);
   }, []);
 
   const attachRadio = () => {
@@ -250,9 +248,9 @@ const Taskbar = ({ openWindows, setOpenWindows, hoverText, setFoundRadio, foundR
         type="info"
         message="What can I help you with?"
         options={[
-          { label: 'My relationship', onClick: () => { setLoveLifeMessage(true); setHelpMessage(false) }}, // Corrected syntax
-          { label: 'Cooking pasta', onClick: () => { setPastaMessage(true); setHelpMessage(false) }}, // Corrected syntax
-          { label: 'This website', onClick: () => {setWebsiteMessage(true) ; setHelpMessage(false)}}, // Corrected syntax
+          { label: 'My relationship', onClick: () => { setLoveLifeMessage(true); setHelpMessage(false) }}, 
+          { label: 'Cooking pasta', onClick: () => { setPastaMessage(true); setHelpMessage(false) }}, 
+          { label: 'This website', onClick: () => {setWebsiteMessage(true) ; setHelpMessage(false)}},
         ]}
       />
       }
@@ -261,7 +259,7 @@ const Taskbar = ({ openWindows, setOpenWindows, hoverText, setFoundRadio, foundR
         type="info"
         message="Love yourself first, surprise each other every once in a while and make sure to communicate"
         options={[
-          { label: 'Aight, thanks!', onClick: () => setLoveLifeMessage(false) }, // Corrected syntax
+          { label: 'Aight, thanks!', onClick: () => setLoveLifeMessage(false) }, 
         ]}
       />
       }
@@ -270,7 +268,7 @@ const Taskbar = ({ openWindows, setOpenWindows, hoverText, setFoundRadio, foundR
         type="info"
         message="Boil water. When it boils add the pasta. Cook it for about 10 minutes. Add salt for flavor"
         options={[
-          { label: 'Brilliant!', onClick: () => setPastaMessage(false) }, // Corrected syntax
+          { label: 'Brilliant!', onClick: () => setPastaMessage(false) },
         ]}
       />
       }
@@ -279,7 +277,7 @@ const Taskbar = ({ openWindows, setOpenWindows, hoverText, setFoundRadio, foundR
         type="info"
         message="Scroll vertically to move. Scroll horizontally to pan the camera. Double tap on the items you want to interact with"
         options={[
-          { label: 'Thank you so so much!', onClick: () => setWebsiteMessage(false) }, // Corrected syntax
+          { label: 'Thank you so so much!', onClick: () => setWebsiteMessage(false) }, 
         ]}
       />
       }
@@ -288,7 +286,7 @@ const Taskbar = ({ openWindows, setOpenWindows, hoverText, setFoundRadio, foundR
         type="info"
         message="Use the mousewheel to move. Use the left mouse button to click on stuff."
         options={[
-          { label: 'Thank you so so much!', onClick: () => setWebsiteMessage(false) }, // Corrected syntax
+          { label: 'Thank you so so much!', onClick: () => setWebsiteMessage(false) }, 
         ]}
       />
       }
@@ -297,8 +295,8 @@ const Taskbar = ({ openWindows, setOpenWindows, hoverText, setFoundRadio, foundR
         type="info"
         message="Are you sure you want to shut down? It seems like a bad idea..."
         options={[
-          { label: 'Nevermind', onClick: () => setShutDownWarning(false) }, // Corrected syntax
-          { label: 'I have no fear!', onClick: () => ShutDown() } // Corrected syntax
+          { label: 'Nevermind', onClick: () => setShutDownWarning(false) }, 
+          { label: 'I have no fear!', onClick: () => ShutDown() } 
         ]}
       />
       }

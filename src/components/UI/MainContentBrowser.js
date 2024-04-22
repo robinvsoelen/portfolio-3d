@@ -33,6 +33,45 @@ const MainContentBrowser = ({onClose, visibleWindows, toggleWindowVisibility, br
       });
   };
 
+  const handleLinkClick = (e) => {
+    const href = e.target.href;
+    if (href.includes("INTERNAL_LINK/")) {
+      e.preventDefault();
+      const lastSlashIndex = href.lastIndexOf('/');
+      const articleFilename = href.substring(lastSlashIndex + 1);
+      const newSearchQuery = `${process.env.PUBLIC_URL}/articles/${articleFilename}`;
+      setSearchQuery(newSearchQuery);
+      handleLinkSearch(newSearchQuery);  // Pass the new search query directly
+      browserWindow.text = articleFilename.replace(".html", "").toUpperCase()
+    }
+  };
+  
+  const handleLinkSearch = (query) => {  // Accept query as an argument
+    fetch(query)
+      .then(response => response.text())
+      .then(html => {
+        if (!html.startsWith('<!DOCTYPE html>')) {
+          setArticleContent(html);
+        } else {
+          // If the server response was not ok (e.g., 404 or 500 error), handle it
+          throw new Error('Network response was not ok');
+        }
+      })
+      .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+        setArticleContent(PageNotFound());
+      });
+  };
+
+  const handleContentMount = (node) => {
+    if (node) {
+      const links = node.querySelectorAll('a');
+      links.forEach(link => {
+        link.addEventListener('click', handleLinkClick);
+      });
+    }
+  };
+
   const [articleContent, setArticleContent] = useState('');
 
   const [isDragging, setIsDragging] = useState(false);
@@ -43,12 +82,11 @@ const MainContentBrowser = ({onClose, visibleWindows, toggleWindowVisibility, br
   const [startResizePosition, setStartResizePosition] = useState({ x: 0, y: 0 });
   const [startSize, setStartSize] = useState({ width: 0, height: 0 });
   const [currentResizeDirection, setCurrentResizeDirection] = useState('');
-  const [size, setSize] = useState({ width: window.innerWidth * 0.4, height: window.innerHeight * 0.6 }); // Default width and height can be your starting size
+  const [size, setSize] = useState({ width: window.innerWidth * 0.4, height: window.innerHeight * 0.6 }); 
 
-  const [isFullscreen, setIsFullscreen] = useState(false); // Default width and height can be your starting size
+  const [isFullscreen, setIsFullscreen] = useState(false); 
 
   useEffect(() => {
-    // Calculate center position
     const calculateCenterPosition = () => {
       const x = (window.innerWidth - document.querySelector('.mainContentBrowser').offsetWidth) / 4 - (Math.random() * 100);
       const y = (window.innerHeight - document.querySelector('.mainContentBrowser').offsetHeight) / 8 - (Math.random() * 100);
@@ -68,24 +106,26 @@ const MainContentBrowser = ({onClose, visibleWindows, toggleWindowVisibility, br
       width: document.querySelector('.mainContentBrowser').offsetWidth,
       height: document.querySelector('.mainContentBrowser').offsetHeight,
     });
-    // Save the direction of the resize (e.g., 'right', 'bottom')
     setCurrentResizeDirection(direction);
   };
   
   const handleResizeMove = (e) => {
     if (!isResizing) return;
-  
+    
+    const minWidth = 300;
+    const minHeight = 200;
     let newWidth = startSize.width;
     let newHeight = startSize.height;
   
     if (currentResizeDirection.includes('right')) {
       newWidth = startSize.width + (e.clientX - startResizePosition.x);
+      if (newWidth < minWidth) newWidth = minWidth;
     }
     if (currentResizeDirection.includes('bottom')) {
       newHeight = startSize.height + (e.clientY - startResizePosition.y);
+      if (newHeight < minHeight) newHeight = minHeight;
     }
   
-    // Update component size
     setSize({width: newWidth, height: newHeight });
   };
   
@@ -155,17 +195,17 @@ const MainContentBrowser = ({onClose, visibleWindows, toggleWindowVisibility, br
   return (
     <div
     className="mainContentBrowser"
-    onMouseDown={() => bringToFront(browserWindow.id)} // Apply onMouseDown to the root div
+    onMouseDown={() => bringToFront(browserWindow.id)} 
     style={{
       left: isFullscreen  || isMobile ? '0px' : `${position.x}px`,
       top: isFullscreen  || isMobile ? '0px' : `${position.y}px`,
       width: isFullscreen || isMobile ? '100%' : `${size.width}px`,
       height: isFullscreen || isMobile ? 'calc(100% - 72px)' : `${size.height}px`,
-      transform: 'none', // Adjust or remove transform based on fullscreen state
-      position: isFullscreen || isMobile ? 'fixed' : 'absolute', // Use fixed positioning for fullscreen to cover the entire screen
-      margin: isFullscreen || isMobile  ? '0px' : '20px', // Use fixed positioning for fullscreen to cover the entire screen
-      zIndex: visibleWindows.get(browserWindow.id)?.zIndex || 1, // Fallback to 1 if not set
-      display: visibleWindows.get(browserWindow.id) ? 'flex' : 'none'// Conditionally render based on visibility
+      transform: 'none',
+      position: isFullscreen || isMobile ? 'fixed' : 'absolute', 
+      margin: isFullscreen || isMobile  ? '0px' : '20px', 
+      zIndex: visibleWindows.get(browserWindow.id)?.zIndex || 1, 
+      display: visibleWindows.get(browserWindow.id) ? 'flex' : 'none'
 
     }}
   >      
@@ -189,7 +229,8 @@ const MainContentBrowser = ({onClose, visibleWindows, toggleWindowVisibility, br
       </div>}
       {!browserWindow.click.isArtworkCreator && !browserWindow.click.isArtworkShower && 
       <div className="content">
-       <div className='article' dangerouslySetInnerHTML={{ __html: articleContent }} />
+       <div className='article' ref={handleContentMount}
+ dangerouslySetInnerHTML={{ __html: articleContent }} />
       </div>
       }
       {browserWindow.click.isArtworkCreator && <CreateArtwork/> }
