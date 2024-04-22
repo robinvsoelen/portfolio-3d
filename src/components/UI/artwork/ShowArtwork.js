@@ -84,6 +84,12 @@ const ShowArtwork = () => {
       setInitialFetchDone(false); // Reset for a new initial fetch after sort change
     };
 
+    const truncateText = (text, maxLength) => {
+      if (text.length <= maxLength) return text;
+      return text.substring(0, maxLength) + '...';
+    };
+    
+
     const upvoteArtwork = async (id, currentUpvotes) => {
         const auth = getAuth();
       
@@ -144,9 +150,9 @@ const ShowArtwork = () => {
       <div className='artworkShowContainer'>
         {artworks.map((artwork, index) => (
           <div className='artworkItem' key={artwork.id}>
-            <img className='artImage' src={artwork.imageUrl} alt={artwork.title} />
-            <h2>{artwork.title}</h2>
-            <p style={{marginTop:'-10px'}}><i>Artist: <b>{artwork.artist}</b></i></p>
+            <img className='artImage' src={artwork.imageUrl} alt={truncateText(artwork.title, 50)} />
+            <h2>{truncateText(artwork.title, 50)}</h2> 
+            <p style={{marginTop:'-10px'}}><i>Artist: <b>{truncateText(artwork.artist, 30)}</b></i></p>
             <div style={{ display: 'flex', alignItems: 'center', fontSize: '20px' }}>
             {localStorage.getItem(`upvoted-${artwork.id}`) ? 
                 <img src='assets/img/upvoted.svg' alt="Upvoted" className='upvoteButton' onClick={() => upvoteArtwork(artwork.id, artwork.upvotes)} /> :

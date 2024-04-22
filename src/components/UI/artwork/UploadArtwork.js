@@ -96,8 +96,8 @@ const UploadArtwork = ({canvasRef}) => {
 
     return (
         <div className="uploadArtworkContainer">
-            <input type="text" value={artist} onChange={handleArtistChange} placeholder="Artist Name" disabled={loading} />
-            <input type="text" value={title} onChange={handleTitleChange} placeholder="Artwork title" disabled={loading} />
+            <input type="text" maxLength="50" value={artist} onChange={handleArtistChange} placeholder="Artist Name" disabled={loading} />
+            <input type="text" maxLength="30" value={title} onChange={handleTitleChange} placeholder="Artwork title" disabled={loading} />
             <span style={{fontSize: 12, marginLeft: 10, textAlign: 'left'}}><input type="checkbox" checked={emailConsent} onChange={handleEmailConsent} disabled={loading} /> I want to receive an email whenever Robin feels he has something to say (which won't be that often) </span>
             
             {emailConsent && <input type="text" value={email} onChange={handleEmailChange} placeholder="Email" disabled={loading} />}
