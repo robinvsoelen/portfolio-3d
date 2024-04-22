@@ -338,7 +338,7 @@ const Taskbar = ({ openWindows, setOpenWindows, hoverText, setFoundRadio, foundR
         )}
 
 
-        {attachedRadio && <Radio />}
+        {!isMobile && attachedRadio && <Radio />}
         <div className='honk' onClick={() => honk()}>
           <img className='honkImage' src={'assets/img/klaxon.svg'} width={45} height={45} />
         </div>
@@ -346,6 +346,7 @@ const Taskbar = ({ openWindows, setOpenWindows, hoverText, setFoundRadio, foundR
           {currentTime.toLocaleTimeString()}
         </div>
       </div>
+      {isMobile && attachedRadio && <Radio />}
     </div>
   );
 };

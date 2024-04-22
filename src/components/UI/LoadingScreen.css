@@ -15,6 +15,8 @@
     background-position: center center; /* x-position y-position */
     background-repeat: no-repeat; /* Prevents the image from repeating */
     background-size: cover;
+    font-family: "MS Sans Serif", Geneva, sans-serif;
+
 }
 .LoadingContainer.fadeOut {
     opacity: 0;
@@ -34,7 +36,7 @@
 
 .userReadyText {
 
-    font-size: 20px;
+    font-size: 16px;
     color: white;
 }
 
@@ -51,7 +53,7 @@
     border-radius: 10px;
     border: 2px #fff;
     border-style: solid;
-    padding: 10px;
+    padding: 20px;
     cursor: pointer;
 }
 
@@ -68,7 +70,6 @@
     top: 50%;
     transform: translate(-50%, -50%);
     font-size: 30px;
-    font-family: "PT Serif", serif;
     font-weight: 200;
     font-style: normal;
     color: #ffffff;

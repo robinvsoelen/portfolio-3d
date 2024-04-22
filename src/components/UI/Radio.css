@@ -10,6 +10,18 @@
     right: 220px;
     width: 300px;
   }
+
+  .radio-container-mobile {
+    background-color: #C0C0C0;
+    padding: 10px;
+    font-family: "MS Sans Serif", Geneva, sans-serif;
+    font-size: 12px;
+    align-items: center;
+    position: absolute;
+    right: 10px;
+    width: 300px;
+    bottom: 80px;
+  }
   
   .station-display {
     margin-bottom: 10px;

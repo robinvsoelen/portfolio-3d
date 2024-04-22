@@ -20,7 +20,7 @@ const LoadingScreen = ({ loaded, loadingProgress, setUserReady, userReady }) => 
                 {loaded && <div className='loadingContent'>
                     <h1 className='userReadyHeader'>Welcome!</h1>
                     {(isMobile || isTablet) && <p className='userReadyText'>Scroll vertically to move, scroll horizontally to pan the camera</p>}
-                    {(!isMobile & !isTablet) && <p className='userReadyText'>Use the mousewheel to move around</p>}
+                    {(!isMobile && !isTablet) && <p className='userReadyText'>Use the mousewheel to move around</p>}
 
                     <button className='userReadyButton' onClick={handleUserReady}>Start</button>
                 </div>}

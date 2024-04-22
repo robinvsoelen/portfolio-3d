@@ -214,7 +214,7 @@ function MainScene() {
 
       </Canvas>
 
-      {<Taskbar openWindows={openWindows} setOpenWindows={setOpenWindows} foundRadio={foundRadio} setFoundRadio={setFoundRadio} carRef={carRef} foundGuitar={foundGuitar} foundSurfboard={foundSurfboard} />}
+      {userReady && <Taskbar openWindows={openWindows} setOpenWindows={setOpenWindows} foundRadio={foundRadio} setFoundRadio={setFoundRadio} carRef={carRef} foundGuitar={foundGuitar} foundSurfboard={foundSurfboard} />}
 
 
     </div>

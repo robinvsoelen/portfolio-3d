@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './Radio.css'; 
+import { isMobile, isTablet } from 'react-device-detect';
 
 const stations = [
     { frequency: 88.1, name: "robovs classics", streamUrl: "assets/audio/robovs classics.mp3" },
@@ -55,7 +56,7 @@ const Radio = () => {
   }, [isPlaying])
 
   return (
-    <div className="radio-container">
+    <div className={isMobile ? "radio-container-mobile" : "radio-container"}>
       <div className="station-display">
         Listening to: {stations[currentStationIndex].name} ({stations[currentStationIndex].frequency} MHz)
       </div>
